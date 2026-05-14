@@ -3,194 +3,187 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fidelidade — Paiol & Rancho Novo</title>
+<title>Fidelidade Paiol e Rancho Novo</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f0;color:#1a1a1a;font-size:16px}
-.header{background:#fff;border-bottom:1px solid #e0e0d8;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
-.header h1{font-size:17px;font-weight:600}
-.sync-badge{font-size:11px;padding:4px 10px;border-radius:20px;background:#e8f9f0;color:#0F6E56;font-weight:500}
-.sync-badge.offline{background:#fff5f5;color:#a32d2d}
-.sync-badge.syncing{background:#fffbe6;color:#7a5c00}
-.tabs{display:flex;gap:6px;padding:12px 16px;background:#fff;border-bottom:1px solid #e8e8e0;flex-wrap:wrap}
-.tab{padding:7px 14px;border:1px solid #d0d0c8;border-radius:20px;background:transparent;cursor:pointer;font-size:13px;color:#666;white-space:nowrap}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f0;color:#1a1a1a;font-size:15px}
+.header{background:#fff;border-bottom:1px solid #e0e0d8;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+.header h1{font-size:16px;font-weight:600}
+.badge{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500}
+.badge.ok{background:#e8f9f0;color:#0F6E56}
+.badge.err{background:#fff5f5;color:#a32d2d}
+.badge.wait{background:#fffbe6;color:#7a5c00}
+.tabs{display:flex;gap:6px;padding:10px 16px;background:#fff;border-bottom:1px solid #e8e8e0;overflow-x:auto}
+.tab{padding:6px 14px;border:1px solid #d0d0c8;border-radius:20px;background:#fff;cursor:pointer;font-size:13px;color:#666;white-space:nowrap;flex-shrink:0}
 .tab.active{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
-.screen{display:none;padding:16px}
-.screen.active{display:block}
-.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:10px;margin-bottom:16px}
-.metric{background:#fff;border-radius:10px;padding:12px;border:1px solid #e8e8e0}
-.metric-label{font-size:11px;color:#888;margin-bottom:4px}
-.metric-value{font-size:22px;font-weight:700;color:#1a1a1a}
-.card{background:#fff;border:1px solid #e8e8e0;border-radius:12px;padding:14px;margin-bottom:10px}
-.section-title{font-size:15px;font-weight:600;margin-bottom:12px}
-.field-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
-.field{display:flex;flex-direction:column;gap:4px;flex:1;min-width:140px}
-.field label{font-size:12px;color:#666;font-weight:500}
-.field input,.field select{padding:9px 12px;border:1px solid #d0d0c8;border-radius:8px;font-size:14px;background:#fff;color:#1a1a1a;width:100%;outline:none}
-.field input:focus,.field select:focus{border-color:#1a1a1a}
-.btn{padding:9px 16px;border:1px solid #d0d0c8;border-radius:8px;background:#fff;cursor:pointer;font-size:14px;color:#1a1a1a;font-weight:500}
-.btn-primary{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
-.btn-success{border-color:#1D9E75;color:#0F6E56;background:#f0faf5}
-.btn-danger{border-color:#e24b4a;color:#a32d2d;font-size:12px;padding:6px 10px;background:#fff5f5}
-.client-list{display:flex;flex-direction:column;gap:8px}
-.client-item{background:#fff;border:1px solid #e8e8e0;border-radius:12px;padding:13px 14px}
-.client-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;gap:8px}
-.client-name{font-weight:600;font-size:15px}
-.client-phone{font-size:13px;color:#666;margin-top:1px}
-.tag{font-size:11px;padding:2px 8px;border-radius:20px;margin-top:3px;display:inline-block;margin-right:3px}
-.tag-racao{background:#f0f0e8;color:#555;cursor:pointer}
-.tag-contato{background:#e8f0fe;color:#1a56cc}
-.prize-badge{font-size:12px;padding:4px 10px;border-radius:20px;font-weight:600;white-space:nowrap;background:#f0f0e8;color:#555}
-.prize-ready{background:#e8f9f0;color:#0F6E56;border:1px solid #1D9E75}
-.bar-bg{background:#f0f0e8;border-radius:99px;height:6px;overflow:hidden;margin:8px 0}
-.bar-fill{height:6px;border-radius:99px;background:#1a1a1a;transition:width 0.3s}
-.actions-row{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
-.history-item{font-size:12px;padding:5px 0;border-bottom:1px solid #f0f0e8;display:flex;justify-content:space-between;color:#888}
-.history-item:last-child{border-bottom:none}
-.empty{text-align:center;padding:2rem;color:#aaa;font-size:14px}
-.loading{text-align:center;padding:2rem;color:#888;font-size:14px}
-.search-bar{margin-bottom:12px}
-.search-bar input{width:100%;padding:10px 14px;border:1px solid #d0d0c8;border-radius:10px;font-size:14px;background:#fff;outline:none}
-.filter-row{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
-.filter-btn{padding:5px 12px;border:1px solid #d0d0c8;border-radius:20px;font-size:12px;cursor:pointer;background:#fff;color:#666}
-.filter-btn.active{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
-.msg{padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:10px;display:none}
+.page{display:none;padding:14px}
+.page.active{display:block}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(85px,1fr));gap:8px;margin-bottom:14px}
+.kpi{background:#fff;border-radius:10px;padding:10px 12px;border:1px solid #e8e8e0}
+.kpi-l{font-size:11px;color:#888;margin-bottom:2px}
+.kpi-v{font-size:22px;font-weight:700}
+.card{background:#fff;border:1px solid #e8e8e0;border-radius:12px;padding:12px 14px;margin-bottom:10px}
+.stitle{font-size:14px;font-weight:600;margin-bottom:10px}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.f{display:flex;flex-direction:column;gap:3px;flex:1;min-width:130px}
+.f label{font-size:11px;color:#666;font-weight:500}
+.f input,.f select{padding:8px 10px;border:1px solid #d0d0c8;border-radius:8px;font-size:14px;background:#fff;color:#1a1a1a;width:100%;outline:none}
+.f input:focus,.f select:focus{border-color:#1a1a1a}
+.btn{padding:8px 14px;border:1px solid #d0d0c8;border-radius:8px;background:#fff;cursor:pointer;font-size:13px;color:#1a1a1a;font-weight:500}
+.btn.p{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+.btn.g{border-color:#1D9E75;color:#0F6E56;background:#f0faf5}
+.btn.r{border-color:#e24b4a;color:#a32d2d;font-size:12px;padding:5px 9px;background:#fff5f5}
+.clist{display:flex;flex-direction:column;gap:8px}
+.ci{background:#fff;border:1px solid #e8e8e0;border-radius:12px;padding:12px 13px}
+.ch{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7px;gap:6px}
+.cn{font-weight:600;font-size:14px}
+.cp{font-size:12px;color:#666;margin-top:1px}
+.tg{font-size:11px;padding:2px 7px;border-radius:20px;margin-top:2px;display:inline-block;margin-right:2px}
+.tg.rc{background:#f0f0e8;color:#555;cursor:pointer}
+.tg.ct{background:#e8f0fe;color:#1a56cc}
+.pb{font-size:11px;padding:3px 9px;border-radius:20px;font-weight:600;white-space:nowrap;background:#f0f0e8;color:#555}
+.pb.prize{background:#e8f9f0;color:#0F6E56;border:1px solid #1D9E75}
+.bar{background:#f0f0e8;border-radius:99px;height:5px;overflow:hidden;margin:6px 0}
+.barf{height:5px;border-radius:99px;background:#1a1a1a;transition:width .3s}
+.ar{display:flex;gap:5px;margin-top:7px;flex-wrap:wrap}
+.hi{font-size:11px;padding:4px 0;border-bottom:1px solid #f0f0e8;display:flex;justify-content:space-between;color:#888}
+.hi:last-child{border-bottom:none}
+.empty{text-align:center;padding:24px;color:#aaa;font-size:13px}
+.loading{text-align:center;padding:24px;color:#888;font-size:13px}
+.sb{margin-bottom:10px}
+.sb input{width:100%;padding:9px 12px;border:1px solid #d0d0c8;border-radius:10px;font-size:14px;background:#fff;outline:none}
+.fb{display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap}
+.fb .btn{font-size:12px;padding:4px 11px;border-radius:20px}
+.msg{padding:9px 12px;border-radius:8px;font-size:13px;margin-bottom:8px;display:none}
 .msg.show{display:block}
-.msg-success{background:#e8f9f0;color:#0F6E56}
-.msg-info{background:#e8f0fe;color:#1a56cc}
-.pagination{display:flex;gap:6px;align-items:center;justify-content:center;margin-top:12px;flex-wrap:wrap}
-.page-btn{padding:5px 12px;border:1px solid #d0d0c8;border-radius:8px;font-size:13px;cursor:pointer;background:#fff;color:#666}
-.page-btn.active{background:#1a1a1a;color:#fff}
-.page-info{font-size:13px;color:#888}
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:100;align-items:center;justify-content:center;padding:16px}
-.modal-overlay.open{display:flex}
-.modal{background:#fff;border-radius:16px;padding:20px;width:100%;max-width:420px;max-height:90vh;overflow-y:auto}
-.modal-title{font-size:16px;font-weight:600;margin-bottom:12px}
-.wa-preview{background:#e8f9f0;border-radius:10px;padding:14px;font-size:13px;color:#1a4a30;line-height:1.7;margin:12px 0;white-space:pre-line;border:1px solid #c0e8d0}
-.modal-actions{display:flex;gap:8px;margin-top:12px}
-.sync-btn{font-size:11px;padding:4px 10px;border:1px solid #d0d0c8;border-radius:20px;background:#fff;cursor:pointer;color:#666}
+.msg.s{background:#e8f9f0;color:#0F6E56}
+.msg.i{background:#e8f0fe;color:#1a56cc}
+.pg{display:flex;gap:5px;align-items:center;justify-content:center;margin-top:10px;flex-wrap:wrap}
+.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;align-items:center;justify-content:center;padding:14px}
+.mo.open{display:flex}
+.md{background:#fff;border-radius:14px;padding:18px;width:100%;max-width:400px;max-height:90vh;overflow-y:auto}
+.md h3{font-size:15px;font-weight:600;margin-bottom:10px}
+.wa{background:#e8f9f0;border-radius:10px;padding:12px;font-size:13px;color:#1a4a30;line-height:1.65;margin:10px 0;white-space:pre-wrap;border:1px solid #c0e8d0;word-break:break-word}
+.ma{display:flex;gap:7px;margin-top:10px}
 </style>
 </head>
 <body>
 <div class="header">
-  <h1>🐾 Cartão Fidelidade</h1>
-  <div style="display:flex;gap:6px;align-items:center">
-    <button class="sync-btn" onclick="sincronizar()">🔄 Sincronizar</button>
-    <span class="sync-badge syncing" id="sync-badge">⏳ Carregando...</span>
-  </div>
+  <h1>Cartao Fidelidade - Paiol e Rancho</h1>
+  <span class="badge wait" id="bdg">Carregando...</span>
 </div>
 <div class="tabs">
-  <button class="tab active" onclick="showScreen('dashboard')">📊 Painel</button>
-  <button class="tab" onclick="showScreen('clientes')">👥 Clientes</button>
-  <button class="tab" onclick="showScreen('registrar')">➕ Registrar</button>
-  <button class="tab" onclick="showScreen('premios')">🎁 Prêmios</button>
-  <button class="tab" onclick="showScreen('crm')">📡 CRM</button>
+  <button class="tab active" onclick="ir('painel')">Painel</button>
+  <button class="tab" onclick="ir('clientes')">Clientes</button>
+  <button class="tab" onclick="ir('registrar')">Registrar</button>
+  <button class="tab" onclick="ir('premios')">Premios</button>
+  <button class="tab" onclick="ir('crm')">CRM</button>
 </div>
-<div id="screen-dashboard" class="screen active">
-  <div class="metrics" id="metrics"><div class="loading">Carregando...</div></div>
-  <div class="card"><p class="section-title">🎁 Prêmios para resgatar</p><div id="premios-disponiveis" class="client-list"></div></div>
-  <div class="card"><p class="section-title">🔥 Próximos do prêmio (faltam 1-2)</p><div id="quase-la" class="client-list"></div></div>
+<div id="pg-painel" class="page active">
+  <div class="grid" id="kpis"><div class="loading">Carregando...</div></div>
+  <div class="card"><p class="stitle">Premios para resgatar</p><div id="ls-premios" class="clist"></div></div>
+  <div class="card"><p class="stitle">Proximos do premio (faltam 1-2)</p><div id="ls-quase" class="clist"></div></div>
 </div>
-<div id="screen-clientes" class="screen">
-  <div class="search-bar"><input type="text" id="search-input" placeholder="Buscar por nome, telefone ou ração..." oninput="currentPage=1;renderClientes()"></div>
-  <div class="filter-row">
-    <button class="filter-btn active" onclick="setFilter('todos',this)">Todos</button>
-    <button class="filter-btn" onclick="setFilter('Paiol',this)">Cel. Paiol</button>
-    <button class="filter-btn" onclick="setFilter('Rancho',this)">Cel. Rancho</button>
-    <button class="filter-btn" onclick="setFilter('Daniel',this)">Cel. Daniel</button>
-    <button class="filter-btn" onclick="setFilter('Matheus',this)">Cel. Matheus</button>
+<div id="pg-clientes" class="page">
+  <div class="sb"><input type="text" id="busca" placeholder="Buscar nome, telefone ou racao..." oninput="pgAtual=1;listarClientes()"></div>
+  <div class="fb" id="filtros">
+    <button class="btn active" onclick="filtrar('todos',this)">Todos</button>
+    <button class="btn" onclick="filtrar('Paiol',this)">Cel. Paiol</button>
+    <button class="btn" onclick="filtrar('Rancho',this)">Cel. Rancho</button>
+    <button class="btn" onclick="filtrar('Daniel',this)">Cel. Daniel</button>
+    <button class="btn" onclick="filtrar('Matheus',this)">Cel. Matheus</button>
   </div>
-  <div id="lista-clientes" class="client-list"><div class="loading">Carregando...</div></div>
-  <div class="pagination" id="pagination"></div>
+  <div id="ls-clientes" class="clist"><div class="loading">Carregando...</div></div>
+  <div class="pg" id="paginacao"></div>
 </div>
-<div id="screen-registrar" class="screen">
+<div id="pg-registrar" class="page">
   <div class="card">
-    <p class="section-title">Novo cadastro</p>
-    <div class="field-row">
-      <div class="field"><label>Nome completo</label><input id="reg-nome" type="text" placeholder="Ex: João da Silva"></div>
-      <div class="field"><label>WhatsApp</label><input id="reg-tel" type="tel" placeholder="(42) 99999-9999"></div>
+    <p class="stitle">Novo cliente</p>
+    <div class="row">
+      <div class="f"><label>Nome</label><input id="rn" type="text" placeholder="Joao da Silva"></div>
+      <div class="f"><label>WhatsApp</label><input id="rt" type="tel" placeholder="(42) 99999-9999"></div>
     </div>
-    <div class="field-row">
-      <div class="field"><label>Celular onde está salvo</label>
-        <select id="reg-contato">
+    <div class="row">
+      <div class="f"><label>Salvo no celular</label>
+        <select id="rc">
           <option value="Paiol">Celular da Paiol</option>
-          <option value="Rancho">Celular da Rancho Novo</option>
+          <option value="Rancho">Celular da Rancho</option>
           <option value="Daniel">Celular do Daniel</option>
           <option value="Matheus">Celular do Matheus</option>
         </select>
       </div>
-      <div class="field"><label>Ração</label><input id="reg-racao" type="text" placeholder="Ex: Special Dog 15kg"></div>
+      <div class="f"><label>Racao</label><input id="rr" type="text" placeholder="Special Dog 15kg"></div>
     </div>
-    <div class="field-row">
-      <div class="field"><label>Tipo de cartão</label>
-        <select id="reg-tipo">
-          <option value="10">10 pacotes → 11º com 50% off</option>
-          <option value="20">20 pacotes → 21º grátis</option>
+    <div class="row">
+      <div class="f"><label>Cartao</label>
+        <select id="rtp">
+          <option value="10">10 pacotes - 11 com 50% off</option>
+          <option value="20">20 pacotes - 21 gratis</option>
         </select>
       </div>
     </div>
-    <button class="btn btn-primary" onclick="cadastrarCliente()">Cadastrar cliente</button>
-    <div id="msg-cadastro" class="msg"></div>
+    <button class="btn p" onclick="novoCliente()">Cadastrar</button>
+    <div id="msg-cad" class="msg"></div>
   </div>
   <div class="card">
-    <p class="section-title">Registrar compra</p>
-    <div class="field-row">
-      <div class="field"><label>Buscar cliente</label><input id="comp-busca" type="text" placeholder="Nome ou telefone..." oninput="buscarClienteCompra()"></div>
+    <p class="stitle">Registrar compra</p>
+    <div class="row">
+      <div class="f"><label>Buscar cliente</label><input id="cb" type="text" placeholder="Nome ou telefone..." oninput="buscaCompra()"></div>
     </div>
-    <div class="field-row">
-      <div class="field"><label>Data da compra</label><input id="comp-data" type="date"></div>
-      <div class="field"><label>Qtd de pacotes</label><input id="comp-qtd" type="number" min="1" max="20" value="1"></div>
+    <div class="row">
+      <div class="f"><label>Data</label><input id="cd" type="date"></div>
+      <div class="f"><label>Qtd pacotes</label><input id="cq" type="number" min="1" max="20" value="1"></div>
     </div>
-    <div id="comp-resultados" style="margin-bottom:10px"></div>
-    <div id="msg-compra" class="msg"></div>
+    <div id="ls-compra" style="margin-bottom:8px"></div>
+    <div id="msg-cmp" class="msg"></div>
   </div>
 </div>
-<div id="screen-premios" class="screen">
+<div id="pg-premios" class="page">
   <div class="card">
-    <p class="section-title">Resgatar prêmio</p>
-    <div class="field-row"><div class="field"><label>Buscar cliente</label><input id="premio-busca" type="text" placeholder="Nome ou telefone..." oninput="buscarClientePremio()"></div></div>
-    <div id="premio-resultados"></div>
-    <div id="msg-premio" class="msg"></div>
+    <p class="stitle">Resgatar premio</p>
+    <div class="row"><div class="f"><label>Buscar cliente</label><input id="pb2" type="text" placeholder="Nome ou telefone..." oninput="buscaPremio()"></div></div>
+    <div id="ls-premio" class="clist"></div>
+    <div id="msg-prm" class="msg"></div>
   </div>
 </div>
-<div id="screen-crm" class="screen">
+<div id="pg-crm" class="page">
   <div class="card">
-    <p class="section-title">📡 Radar de recompra</p>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
-      <button class="filter-btn active" onclick="setCrmFilter('todos',this)">Todos</button>
-      <button class="filter-btn" onclick="setCrmFilter('verde',this)">🟢 Em dia</button>
-      <button class="filter-btn" onclick="setCrmFilter('amarelo',this)">🟡 Atenção</button>
-      <button class="filter-btn" onclick="setCrmFilter('vermelho',this)">🔴 Em risco</button>
-      <button class="filter-btn" onclick="setCrmFilter('perdido',this)">⚫ Perdido</button>
+    <p class="stitle">Radar de recompra</p>
+    <div class="fb" id="crm-filtros">
+      <button class="btn active" onclick="crmFiltrar('todos',this)">Todos</button>
+      <button class="btn" onclick="crmFiltrar('verde',this)">Verde - Em dia</button>
+      <button class="btn" onclick="crmFiltrar('amarelo',this)">Atencao</button>
+      <button class="btn" onclick="crmFiltrar('vermelho',this)">Em risco</button>
+      <button class="btn" onclick="crmFiltrar('perdido',this)">Perdido</button>
     </div>
-    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px">
-      <label style="font-size:12px;color:#666">Faixas:</label>
-      <span style="font-size:12px">🟢 até <input id="crm-d1" type="number" value="20" style="width:44px;padding:3px 6px;border:1px solid #d0d0c8;border-radius:6px;font-size:12px"> dias</span>
-      <span style="font-size:12px">🟡 até <input id="crm-d2" type="number" value="35" style="width:44px;padding:3px 6px;border:1px solid #d0d0c8;border-radius:6px;font-size:12px"> dias</span>
-      <span style="font-size:12px">🔴 até <input id="crm-d3" type="number" value="60" style="width:44px;padding:3px 6px;border:1px solid #d0d0c8;border-radius:6px;font-size:12px"> dias</span>
-      <button class="btn btn-primary" style="font-size:12px;padding:6px 12px" onclick="renderCRM()">Aplicar</button>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px;font-size:12px">
+      Verde ate <input id="d1" type="number" value="20" style="width:42px;padding:2px 6px;border:1px solid #d0d0c8;border-radius:6px;font-size:12px"> dias
+      Atencao ate <input id="d2" type="number" value="35" style="width:42px;padding:2px 6px;border:1px solid #d0d0c8;border-radius:6px;font-size:12px"> dias
+      Risco ate <input id="d3" type="number" value="60" style="width:42px;padding:2px 6px;border:1px solid #d0d0c8;border-radius:6px;font-size:12px"> dias
+      <button class="btn p" style="font-size:12px;padding:5px 10px" onclick="renderCRM()">Aplicar</button>
     </div>
-    <div id="crm-metricas" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:8px;margin-bottom:12px"></div>
-    <div id="crm-lista" class="client-list"></div>
+    <div class="grid" id="crm-kpis"></div>
+    <div id="ls-crm" class="clist"></div>
   </div>
 </div>
-<div id="modal-overlay" class="modal-overlay">
-  <div class="modal">
-    <p class="modal-title" id="modal-title"></p>
-    <div class="wa-preview" id="modal-body"></div>
-    <div class="modal-actions">
-      <button class="btn btn-success" onclick="copiarMsg()">📋 Copiar</button>
+<div id="modal" class="mo">
+  <div class="md">
+    <h3 id="mo-titulo"></h3>
+    <div class="wa" id="mo-corpo"></div>
+    <div class="ma">
+      <button class="btn g" onclick="copiar()">Copiar mensagem</button>
       <button class="btn" onclick="fecharModal()">Fechar</button>
     </div>
   </div>
 </div>
-
 <script type="module">
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getFirestore, collection, doc, setDoc, deleteDoc, getDocs, writeBatch } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-import { getAuth, signInAnonymously } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+const DADOS = [{"id": "Lucas-42_99856-4230-paiol", "nome": "Lucas", "tel": "42 99856-4230", "tipo": "10", "pontos": 1, "historico": [{"data": "21/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "21/03/2026", "contato": "Paiol"}, {"id": "Alaor-42_98445-5603-paiol", "nome": "Alaor", "tel": "42 98445-5603", "tipo": "10", "pontos": 1, "historico": [{"data": "21/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "21/03/2026", "contato": "Paiol"}, {"id": "Adriane-42_98811-9122-paiol", "nome": "Adriane", "tel": "42 98811-9122", "tipo": "10", "pontos": 1, "historico": [{"data": "17/02/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "17/02/2026", "contato": "Paiol"}, {"id": "Guilherme-42_99814-4901-paiol", "nome": "Guilherme", "tel": "42 99814-4901", "tipo": "10", "pontos": 2, "historico": [{"data": "19/02/2026", "tipo": "compra"}, {"data": "04/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "19/02/2026", "contato": "Paiol"}, {"id": "Luciana-42_99992-5582-paiol", "nome": "Luciana", "tel": "42 99992-5582", "tipo": "10", "pontos": 2, "historico": [{"data": "11/02/2026", "tipo": "compra"}, {"data": "25/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "11/02/2026", "contato": "Paiol"}, {"id": "Guilherme-42_9957-8008-paiol", "nome": "Guilherme", "tel": "42 9957-8008", "tipo": "10", "pontos": 1, "historico": [{"data": "24/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "24/03/2026", "contato": "Paiol"}, {"id": "Maycon-42_99922-4085-paiol", "nome": "Maycon", "tel": "42 99922-4085", "tipo": "10", "pontos": 1, "historico": [{"data": "16/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "16/03/2026", "contato": "Paiol"}, {"id": "Ferreira-42_98818-2830-paiol", "nome": "Ferreira", "tel": "42 98818-2830", "tipo": "10", "pontos": 1, "historico": [{"data": "14/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "14/03/2026", "contato": "Paiol"}, {"id": "Leo-42_99954-4766-paiol", "nome": "Leo", "tel": "42 99954-4766", "tipo": "10", "pontos": 1, "historico": [{"data": "16/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "16/03/2026", "contato": "Paiol"}, {"id": "Luis-42_99992-5682-paiol", "nome": "Luis", "tel": "42 99992-5682", "tipo": "10", "pontos": 1, "historico": [{"data": "12/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "12/03/2026", "contato": "Paiol"}, {"id": "Daiane-42_98823-0674-paiol", "nome": "Daiane", "tel": "42 98823-0674", "tipo": "10", "pontos": 1, "historico": [{"data": "10/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "10/03/2026", "contato": "Paiol"}, {"id": "Maycon-42_8428-1299-paiol", "nome": "Maycon", "tel": "42 8428-1299", "tipo": "10", "pontos": 3, "historico": [{"data": "25/03/2026", "tipo": "compra"}, {"data": "10/04/2026", "tipo": "compra"}, {"data": "27/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "25/03/2026", "contato": "Paiol"}, {"id": "?-42_9910-4147-paiol", "nome": "?", "tel": "42 9910-4147", "tipo": "10", "pontos": 1, "historico": [{"data": "21/02/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "21/02/2026", "contato": "Paiol"}, {"id": "Marcos_Bueno-42_99153-4863-pai", "nome": "Marcos Bueno", "tel": "42 99153-4863", "tipo": "10", "pontos": 2, "historico": [{"data": "21/02/2026", "tipo": "compra"}, {"data": "01/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "21/02/2026", "contato": "Paiol"}, {"id": "Márcio-42_99975-9349-paiol", "nome": "Márcio", "tel": "42 99975-9349", "tipo": "10", "pontos": 2, "historico": [{"data": "24/02/2026", "tipo": "compra"}, {"data": "18/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "24/02/2026", "contato": "Paiol"}, {"id": "Ederson-42_99801-2071-paiol", "nome": "Ederson", "tel": "42 99801-2071", "tipo": "10", "pontos": 2, "historico": [{"data": "03/03/2026", "tipo": "compra"}, {"data": "08/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "03/03/2026", "contato": "Paiol"}, {"id": "Céia-42_99806-7776-paiol", "nome": "Céia", "tel": "42 99806-7776", "tipo": "10", "pontos": 2, "historico": [{"data": "06/03/2026", "tipo": "compra"}, {"data": "07/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "06/03/2026", "contato": "Paiol"}, {"id": "Tati-42_99942-1049-rancho", "nome": "Tati", "tel": "42 99942-1049", "tipo": "10", "pontos": 1, "historico": [{"data": "20/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "20/03/2026", "contato": "Rancho"}, {"id": "Leonardo-42_99829-2649-rancho", "nome": "Leonardo", "tel": "42 99829-2649", "tipo": "10", "pontos": 2, "historico": [{"data": "25/03/2026", "tipo": "compra"}, {"data": "25/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "25/03/2026", "contato": "Rancho"}, {"id": "Wagner-42_9933-5468-paiol", "nome": "Wagner", "tel": "42 9933-5468", "tipo": "10", "pontos": 1, "historico": [{"data": "16/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "16/03/2026", "contato": "Paiol"}, {"id": "Mariana-42_9835-9684-paiol", "nome": "Mariana", "tel": "42 9835-9684", "tipo": "10", "pontos": 1, "historico": [{"data": "27/01/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "27/01/2026", "contato": "Paiol"}, {"id": "Juliano-42_99810-4960-paiol", "nome": "Juliano", "tel": "42 99810-4960", "tipo": "10", "pontos": 3, "historico": [{"data": "26/02/2026", "tipo": "compra"}, {"data": "10/04/2026", "tipo": "compra"}, {"data": "10/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "26/02/2026", "contato": "Paiol"}, {"id": "Michelle-42_8868-0101-paiol", "nome": "Michelle", "tel": "42 8868-0101", "tipo": "10", "pontos": 1, "historico": [{"data": "26/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "26/03/2026", "contato": "Paiol"}, {"id": "Ana-42_99933-8729-rancho", "nome": "Ana", "tel": "42 99933-8729", "tipo": "10", "pontos": 1, "historico": [{"data": "26/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "26/03/2026", "contato": "Rancho"}, {"id": "Orion-42_99975-5378-paiol", "nome": "Orion", "tel": "42 99975-5378", "tipo": "10", "pontos": 2, "historico": [{"data": "26/03/2026", "tipo": "compra"}, {"data": "06/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "26/03/2026", "contato": "Paiol"}, {"id": "Neguinho-42_99954-5523-rancho", "nome": "Neguinho", "tel": "42 99954-5523", "tipo": "10", "pontos": 1, "historico": [{"data": "27/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "27/03/2026", "contato": "Rancho"}, {"id": "Diego-42_99119-4662-paiol", "nome": "Diego", "tel": "42 99119-4662", "tipo": "10", "pontos": 1, "historico": [{"data": "30/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "30/03/2026", "contato": "Paiol"}, {"id": "Lais_D_aquino-42_98860-3219-pa", "nome": "Lais D'aquino", "tel": "42 98860-3219", "tipo": "10", "pontos": 1, "historico": [{"data": "31/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "31/03/2026", "contato": "Paiol"}, {"id": "Sandro-42_99113-5154-paiol", "nome": "Sandro", "tel": "42 99113-5154", "tipo": "10", "pontos": 1, "historico": [{"data": "30/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "30/03/2026", "contato": "Paiol"}, {"id": "Oslei-42_99813-7038-paiol", "nome": "Oslei", "tel": "42 99813-7038", "tipo": "10", "pontos": 1, "historico": [{"data": "31/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "31/03/2026", "contato": "Paiol"}, {"id": "Airton-Sem_telefone-paiol", "nome": "Airton", "tel": "Sem telefone", "tipo": "10", "pontos": 0, "historico": [], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "01/01/2026", "contato": "Paiol"}, {"id": "Solange-42_99827-9073-paiol", "nome": "Solange", "tel": "42 99827-9073", "tipo": "10", "pontos": 1, "historico": [{"data": "13/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "13/04/2026", "contato": "Paiol"}, {"id": "Adriana-42_99967-4399-rancho", "nome": "Adriana", "tel": "42 99967-4399", "tipo": "10", "pontos": 2, "historico": [{"data": "13/04/2026", "tipo": "compra"}, {"data": "13/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "13/04/2026", "contato": "Rancho"}, {"id": "Sancho-42_99113-5154-paiol", "nome": "Sancho", "tel": "42 99113-5154", "tipo": "10", "pontos": 1, "historico": [{"data": "13/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "13/04/2026", "contato": "Paiol"}, {"id": "Eli_Zainedi-42_99956-8756-paio", "nome": "Eli Zainedi", "tel": "42 99956-8756", "tipo": "10", "pontos": 1, "historico": [{"data": "12/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "12/04/2026", "contato": "Paiol"}, {"id": "Bruna-42_99904-5175-paiol", "nome": "Bruna", "tel": "42 99904-5175", "tipo": "10", "pontos": 1, "historico": [{"data": "12/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "12/04/2026", "contato": "Paiol"}, {"id": "Jonathan-42_98842-8413-rancho", "nome": "Jonathan", "tel": "42 98842-8413", "tipo": "10", "pontos": 1, "historico": [{"data": "11/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "11/04/2026", "contato": "Rancho"}, {"id": "Odair-42_99964-8469-paiol", "nome": "Odair", "tel": "42 99964-8469", "tipo": "10", "pontos": 1, "historico": [{"data": "10/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "10/04/2026", "contato": "Paiol"}, {"id": "Emerson-42_99836-0604-rancho", "nome": "Emerson", "tel": "42 99836-0604", "tipo": "10", "pontos": 1, "historico": [{"data": "09/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "09/04/2026", "contato": "Rancho"}, {"id": "Geovani-42_99105-0836-paiol", "nome": "Geovani", "tel": "42 99105-0836", "tipo": "10", "pontos": 2, "historico": [{"data": "09/04/2026", "tipo": "compra"}, {"data": "09/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "09/04/2026", "contato": "Paiol"}, {"id": "Artur-92_985903280-rancho", "nome": "Artur", "tel": "92 985903280", "tipo": "10", "pontos": 1, "historico": [{"data": "08/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "08/04/2026", "contato": "Rancho"}, {"id": "Wilson-42_99946-0571-paiol", "nome": "Wilson", "tel": "42 99946-0571", "tipo": "10", "pontos": 1, "historico": [{"data": "07/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "07/04/2026", "contato": "Paiol"}, {"id": "Josué-47_99605-3325-paiol", "nome": "Josué", "tel": "47 99605-3325", "tipo": "10", "pontos": 1, "historico": [{"data": "06/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "06/04/2026", "contato": "Paiol"}, {"id": "Silvana-42_98838-6663-paiol", "nome": "Silvana", "tel": "42 98838-6663", "tipo": "10", "pontos": 1, "historico": [{"data": "06/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "06/04/2026", "contato": "Paiol"}, {"id": "Diegão-42_99815-3435-rancho", "nome": "Diegão", "tel": "42 99815-3435", "tipo": "10", "pontos": 1, "historico": [{"data": "14/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "14/04/2026", "contato": "Rancho"}, {"id": "Thiago-42_99822-3610-rancho", "nome": "Thiago", "tel": "42 99822-3610", "tipo": "10", "pontos": 2, "historico": [{"data": "22/04/2026", "tipo": "compra"}, {"data": "22/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "22/04/2026", "contato": "Rancho"}, {"id": "Joelson-42_99915-4739-paiol", "nome": "Joelson", "tel": "42 99915-4739", "tipo": "10", "pontos": 1, "historico": [{"data": "21/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "21/04/2026", "contato": "Paiol"}, {"id": "Gustavo-42_99155-3272-paiol", "nome": "Gustavo", "tel": "42 99155-3272", "tipo": "10", "pontos": 2, "historico": [{"data": "16/04/2026", "tipo": "compra"}, {"data": "16/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "16/04/2026", "contato": "Paiol"}, {"id": "Andreia-42_98408-3780-paiol", "nome": "Andreia", "tel": "42 98408-3780", "tipo": "10", "pontos": 1, "historico": [{"data": "15/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "15/04/2026", "contato": "Paiol"}, {"id": "D_S-42_99918-6608-paiol", "nome": "D S", "tel": "42 99918-6608", "tipo": "10", "pontos": 2, "historico": [{"data": "04/03/2026", "tipo": "compra"}, {"data": "11/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "04/03/2026", "contato": "Paiol"}, {"id": "Raquel-42_99841-8509-paiol", "nome": "Raquel", "tel": "42 99841-8509", "tipo": "10", "pontos": 1, "historico": [{"data": "13/12/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "13/12/2026", "contato": "Paiol"}, {"id": "Ana_Paula-42_99911-1540-paiol", "nome": "Ana Paula", "tel": "42 99911-1540", "tipo": "10", "pontos": 1, "historico": [{"data": "05/01/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "05/01/2026", "contato": "Paiol"}, {"id": "Chele-42_99834-3178-paiol", "nome": "Chele", "tel": "42 99834-3178", "tipo": "10", "pontos": 2, "historico": [{"data": "23/02/2026", "tipo": "compra"}, {"data": "13/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "23/02/2026", "contato": "Paiol"}, {"id": "Gustavo-42_99849-1309-paiol", "nome": "Gustavo", "tel": "42 99849-1309", "tipo": "10", "pontos": 1, "historico": [{"data": "18/02/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "18/02/2026", "contato": "Paiol"}, {"id": "Carlos-42_99937-2110-rancho", "nome": "Carlos", "tel": "42 99937-2110", "tipo": "10", "pontos": 1, "historico": [{"data": "24/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "24/03/2026", "contato": "Rancho"}, {"id": "Luciana-42_9992-5582-paiol", "nome": "Luciana", "tel": "42 9992-5582", "tipo": "10", "pontos": 2, "historico": [{"data": "11/02/2026", "tipo": "compra"}, {"data": "25/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "11/02/2026", "contato": "Paiol"}, {"id": "Deusa-42_98876-0345-paiol", "nome": "Deusa", "tel": "42 98876-0345", "tipo": "10", "pontos": 2, "historico": [{"data": "07/03/2026", "tipo": "compra"}, {"data": "07/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "07/03/2026", "contato": "Paiol"}, {"id": "Raissa-73_9848-7671-rancho", "nome": "Raissa", "tel": "73 9848-7671", "tipo": "10", "pontos": 1, "historico": [{"data": "16/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "16/03/2026", "contato": "Rancho"}, {"id": "Daniel_Alves-43_99927-8628-pai", "nome": "Daniel Alves", "tel": "43 99927-8628", "tipo": "10", "pontos": 1, "historico": [{"data": "01/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "01/03/2026", "contato": "Paiol"}, {"id": "Rafaela-42_99837-4094-paiol", "nome": "Rafaela", "tel": "42 99837-4094", "tipo": "10", "pontos": 4, "historico": [{"data": "26/03/2026", "tipo": "compra"}, {"data": "02/04/2026", "tipo": "compra"}, {"data": "11/04/2026", "tipo": "compra"}, {"data": "18/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "26/03/2026", "contato": "Paiol"}, {"id": "Antônio-42_98406-1214-paiol", "nome": "Antônio", "tel": "42 98406-1214", "tipo": "10", "pontos": 1, "historico": [{"data": "27/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "27/03/2026", "contato": "Paiol"}, {"id": "Mateus-42_99943-3097-paiol", "nome": "Mateus", "tel": "42 99943-3097", "tipo": "10", "pontos": 1, "historico": [{"data": "31/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "31/03/2026", "contato": "Paiol"}, {"id": "Vilso-42_99975-8873-rancho", "nome": "Vilso", "tel": "42 99975-8873", "tipo": "10", "pontos": 1, "historico": [{"data": "01/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "01/04/2026", "contato": "Rancho"}, {"id": "Allan-42_99918-1294-paiol", "nome": "Allan", "tel": "42 99918-1294", "tipo": "10", "pontos": 1, "historico": [{"data": "13/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "13/04/2026", "contato": "Paiol"}, {"id": "André-42_99950-6616-paiol", "nome": "André", "tel": "42 99950-6616", "tipo": "10", "pontos": 1, "historico": [{"data": "12/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "12/04/2026", "contato": "Paiol"}, {"id": "Gabriel-42_98868-9227-rancho", "nome": "Gabriel", "tel": "42 98868-9227", "tipo": "10", "pontos": 1, "historico": [{"data": "10/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "10/04/2026", "contato": "Rancho"}, {"id": "Matheus_Nunes-42_99863-0283-ra", "nome": "Matheus Nunes", "tel": "42 99863-0283", "tipo": "10", "pontos": 1, "historico": [{"data": "10/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "10/04/2026", "contato": "Rancho"}, {"id": "Denise-42_99960-7591-paiol", "nome": "Denise", "tel": "42 99960-7591", "tipo": "10", "pontos": 1, "historico": [{"data": "10/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "10/04/2026", "contato": "Paiol"}, {"id": "José_Maurício-42_99948-9546-ra", "nome": "José Maurício", "tel": "42 99948-9546", "tipo": "10", "pontos": 1, "historico": [{"data": "09/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "09/04/2026", "contato": "Rancho"}, {"id": "Jefferson-98402-3025-rancho", "nome": "Jefferson", "tel": "98402-3025", "tipo": "10", "pontos": 1, "historico": [{"data": "09/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "09/04/2026", "contato": "Rancho"}, {"id": "Luciana-42_99857-3898-paiol", "nome": "Luciana", "tel": "42 99857-3898", "tipo": "10", "pontos": 1, "historico": [{"data": "07/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "07/04/2026", "contato": "Paiol"}, {"id": "Willian-42_99857-0817-rancho", "nome": "Willian", "tel": "42 99857-0817", "tipo": "10", "pontos": 1, "historico": [{"data": "21/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "21/04/2026", "contato": "Rancho"}, {"id": "Jair-42_99115-9115-paiol", "nome": "Jair", "tel": "42 99115-9115", "tipo": "10", "pontos": 2, "historico": [{"data": "17/04/2026", "tipo": "compra"}, {"data": "17/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "17/04/2026", "contato": "Paiol"}, {"id": "Woicheski-Sem_telefone-paiol", "nome": "Woicheski", "tel": "Sem telefone", "tipo": "10", "pontos": 1, "historico": [{"data": "16/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "16/04/2026", "contato": "Paiol"}, {"id": "Lucas-42_99829-9658-paiol", "nome": "Lucas", "tel": "42 99829-9658", "tipo": "10", "pontos": 1, "historico": [{"data": "30/01/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog Vegetais", "cadastro": "30/01/2026", "contato": "Paiol"}, {"id": "Tate_Montes-42_9144-9738-paiol", "nome": "Tate Montes", "tel": "42 9144-9738", "tipo": "10", "pontos": 3, "historico": [{"data": "25/03/2026", "tipo": "compra"}, {"data": "13/04/2026", "tipo": "compra"}, {"data": "28/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog Vegetais", "cadastro": "25/03/2026", "contato": "Paiol"}, {"id": "Moisés-42_99929-6466-paiol", "nome": "Moisés", "tel": "42 99929-6466", "tipo": "10", "pontos": 1, "historico": [{"data": "05/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog Vegetais", "cadastro": "05/03/2026", "contato": "Paiol"}, {"id": "Gil-42_99969-7055-rancho", "nome": "Gil", "tel": "42 99969-7055", "tipo": "10", "pontos": 1, "historico": [{"data": "30/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog Vegetais", "cadastro": "30/03/2026", "contato": "Rancho"}, {"id": "Adriele-42_99911-3792-paiol", "nome": "Adriele", "tel": "42 99911-3792", "tipo": "10", "pontos": 1, "historico": [{"data": "31/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog Vegetais", "cadastro": "31/03/2026", "contato": "Paiol"}, {"id": "Paulo-42_99864-5633-paiol", "nome": "Paulo", "tel": "42 99864-5633", "tipo": "10", "pontos": 1, "historico": [{"data": "01/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog Vegetais", "cadastro": "01/04/2026", "contato": "Paiol"}, {"id": "Adelair_Delinha-42_99838-6068-", "nome": "Adelair/Delinha", "tel": "42 99838-6068", "tipo": "10", "pontos": 1, "historico": [{"data": "25/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog PP", "cadastro": "25/03/2026", "contato": "Paiol"}, {"id": "Ana-42_9993-5889-rancho", "nome": "Ana", "tel": "42 9993-5889", "tipo": "10", "pontos": 1, "historico": [{"data": "17/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog PP", "cadastro": "17/03/2026", "contato": "Rancho"}, {"id": "Cassi-42_9865-3575-rancho", "nome": "Cassi", "tel": "42 9865-3575", "tipo": "10", "pontos": 1, "historico": [{"data": "09/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog PP", "cadastro": "09/03/2026", "contato": "Rancho"}, {"id": "Marcelo-42_99981-2223-paiol", "nome": "Marcelo", "tel": "42 99981-2223", "tipo": "10", "pontos": 1, "historico": [{"data": "30/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog PP", "cadastro": "30/03/2026", "contato": "Paiol"}, {"id": "Kay-42_9839-4435-paiol", "nome": "Kay", "tel": "42 9839-4435", "tipo": "10", "pontos": 1, "historico": [{"data": "10/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "UltraLife MGP", "cadastro": "10/03/2026", "contato": "Paiol"}, {"id": "Robinho-42_99987-9936-paiol", "nome": "Robinho", "tel": "42 99987-9936", "tipo": "10", "pontos": 1, "historico": [{"data": "05/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "UltraLife MGP", "cadastro": "05/04/2026", "contato": "Paiol"}, {"id": "Raquel_-_SD_Sênior-42_99841-85", "nome": "Raquel - SD Sênior", "tel": "42 99841-8509", "tipo": "10", "pontos": 1, "historico": [{"data": "09/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "UltraLife MGP", "cadastro": "09/04/2026", "contato": "Paiol"}, {"id": "Mychele_-_Gato-42_93300-5827-p", "nome": "Mychele - Gato", "tel": "42 93300-5827", "tipo": "10", "pontos": 1, "historico": [{"data": "25/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "BioNatural", "cadastro": "25/03/2026", "contato": "Paiol"}, {"id": "Ivana-42_99161-0404-paiol", "nome": "Ivana", "tel": "42 99161-0404", "tipo": "10", "pontos": 1, "historico": [{"data": "02/02/2026", "tipo": "compra"}], "resgates": 0, "racao": "BioNatural", "cadastro": "02/02/2026", "contato": "Paiol"}, {"id": "Nilton-42_99135-6281-paiol", "nome": "Nilton", "tel": "42 99135-6281", "tipo": "10", "pontos": 0, "historico": [], "resgates": 0, "racao": "BioNatural", "cadastro": "01/01/2026", "contato": "Paiol"}, {"id": "Wesley-Sem_telefone-paiol", "nome": "Wesley", "tel": "Sem telefone", "tipo": "10", "pontos": 0, "historico": [], "resgates": 0, "racao": "BioNatural", "cadastro": "01/01/2026", "contato": "Paiol"}, {"id": "Maria_Angela-42_9976-5079-paio", "nome": "Maria Angela", "tel": "42 9976-5079", "tipo": "10", "pontos": 1, "historico": [{"data": "06/02/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Cat", "cadastro": "06/02/2026", "contato": "Paiol"}, {"id": "Márcio-49_99918-5509-rancho", "nome": "Márcio", "tel": "49 99918-5509", "tipo": "10", "pontos": 1, "historico": [{"data": "13/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Cat", "cadastro": "13/04/2026", "contato": "Rancho"}, {"id": "Franciele-42_99990-6905-rancho", "nome": "Franciele", "tel": "42 99990-6905", "tipo": "10", "pontos": 1, "historico": [{"data": "08/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Cat", "cadastro": "08/04/2026", "contato": "Rancho"}, {"id": "Gabriel-42_99818-9428-paiol", "nome": "Gabriel", "tel": "42 99818-9428", "tipo": "10", "pontos": 1, "historico": [{"data": "04/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Gato", "cadastro": "04/03/2026", "contato": "Paiol"}, {"id": "Beatriz-42_99108-4923-paiol", "nome": "Beatriz", "tel": "42 99108-4923", "tipo": "10", "pontos": 1, "historico": [{"data": "30/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Gato", "cadastro": "30/03/2026", "contato": "Paiol"}, {"id": "João_Paulo-42_99124-5683-paiol", "nome": "João Paulo", "tel": "42 99124-5683", "tipo": "10", "pontos": 1, "historico": [{"data": "31/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Gato", "cadastro": "31/03/2026", "contato": "Paiol"}, {"id": "Viviane-42_99977-3428-paiol", "nome": "Viviane", "tel": "42 99977-3428", "tipo": "10", "pontos": 1, "historico": [{"data": "06/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Gato", "cadastro": "06/04/2026", "contato": "Paiol"}, {"id": "Ana_Paula_Naldony-42_9947-9878", "nome": "Ana Paula Naldony", "tel": "42 9947-9878", "tipo": "10", "pontos": 1, "historico": [{"data": "23/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 15kg", "cadastro": "23/03/2026", "contato": "Paiol"}, {"id": "Siliane-42999702102-rancho", "nome": "Siliane", "tel": "42999702102", "tipo": "10", "pontos": 1, "historico": [{"data": "23/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 15kg", "cadastro": "23/03/2026", "contato": "Rancho"}, {"id": "Ton-41_9893-5899-paiol", "nome": "Ton", "tel": "41 9893-5899", "tipo": "10", "pontos": 2, "historico": [{"data": "13/01/2026", "tipo": "compra"}, {"data": "02/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 15kg", "cadastro": "13/01/2026", "contato": "Paiol"}, {"id": "Sérgio-42_9859-8795-paiol", "nome": "Sérgio", "tel": "42 9859-8795", "tipo": "10", "pontos": 2, "historico": [{"data": "30/01/2026", "tipo": "compra"}, {"data": "30/01/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 15kg", "cadastro": "30/01/2026", "contato": "Paiol"}, {"id": "Juliana-42_99911-1358-paiol", "nome": "Juliana", "tel": "42 99911-1358", "tipo": "10", "pontos": 3, "historico": [{"data": "20/03/2026", "tipo": "compra"}, {"data": "01/04/2026", "tipo": "compra"}, {"data": "08/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 15kg", "cadastro": "20/03/2026", "contato": "Paiol"}, {"id": "Rosana-42_99957-1136-paiol", "nome": "Rosana", "tel": "42 99957-1136", "tipo": "10", "pontos": 1, "historico": [{"data": "20/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 15kg", "cadastro": "20/03/2026", "contato": "Paiol"}, {"id": "Idalina-42_98428-8438-paiol", "nome": "Idalina", "tel": "42 98428-8438", "tipo": "10", "pontos": 1, "historico": [{"data": "24/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 15kg", "cadastro": "24/03/2026", "contato": "Paiol"}, {"id": "Sônia-42_99824-0580-paiol", "nome": "Sônia", "tel": "42 99824-0580", "tipo": "10", "pontos": 1, "historico": [{"data": "01/12/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 15kg", "cadastro": "01/12/2026", "contato": "Paiol"}, {"id": "Hans-42_9974-7731-paiol", "nome": "Hans", "tel": "42 9974-7731", "tipo": "10", "pontos": 1, "historico": [{"data": "15/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 15kg", "cadastro": "15/03/2026", "contato": "Paiol"}, {"id": "Dona_Ângela-42_9944-6166-paiol", "nome": "Dona Ângela", "tel": "42 9944-6166", "tipo": "10", "pontos": 1, "historico": [{"data": "10/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 15kg", "cadastro": "10/03/2026", "contato": "Paiol"}, {"id": "Madalena-42_9833-5628-rancho", "nome": "Madalena", "tel": "42 9833-5628", "tipo": "10", "pontos": 2, "historico": [{"data": "07/03/2026", "tipo": "compra"}, {"data": "11/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 15kg", "cadastro": "07/03/2026", "contato": "Rancho"}, {"id": "Jefferson-42_9981-8949-rancho", "nome": "Jefferson", "tel": "42 9981-8949", "tipo": "10", "pontos": 2, "historico": [{"data": "18/02/2026", "tipo": "compra"}, {"data": "27/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 15kg", "cadastro": "18/02/2026", "contato": "Rancho"}, {"id": "Roseli-42_99821-2188-paiol", "nome": "Roseli", "tel": "42 99821-2188", "tipo": "10", "pontos": 1, "historico": [{"data": "30/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 15kg", "cadastro": "30/03/2026", "contato": "Paiol"}, {"id": "Fernando-42_99906-8760-paiol", "nome": "Fernando", "tel": "42 99906-8760", "tipo": "10", "pontos": 1, "historico": [{"data": "30/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 15kg", "cadastro": "30/03/2026", "contato": "Paiol"}, {"id": "Luiz-42_99991-1744-paiol", "nome": "Luiz", "tel": "42 99991-1744", "tipo": "10", "pontos": 1, "historico": [{"data": "09/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 15kg", "cadastro": "09/04/2026", "contato": "Paiol"}, {"id": "Itamar-42_99827-2020-rancho", "nome": "Itamar", "tel": "42 99827-2020", "tipo": "10", "pontos": 1, "historico": [{"data": "23/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 15kg", "cadastro": "23/04/2026", "contato": "Rancho"}, {"id": "Estefani-42_99840-3087-rancho", "nome": "Estefani", "tel": "42 99840-3087", "tipo": "10", "pontos": 1, "historico": [{"data": "28/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 20kg", "cadastro": "28/03/2026", "contato": "Rancho"}, {"id": "Lucas-42_99812-7598-rancho", "nome": "Lucas", "tel": "42 99812-7598", "tipo": "10", "pontos": 1, "historico": [{"data": "11/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 20kg", "cadastro": "11/04/2026", "contato": "Rancho"}, {"id": "Lilian-42_99993-0285-paiol", "nome": "Lilian", "tel": "42 99993-0285", "tipo": "10", "pontos": 1, "historico": [{"data": "10/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 20kg", "cadastro": "10/04/2026", "contato": "Paiol"}, {"id": "Aniele-42_99949-9244-paiol", "nome": "Aniele", "tel": "42 99949-9244", "tipo": "10", "pontos": 1, "historico": [{"data": "10/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 20kg", "cadastro": "10/04/2026", "contato": "Paiol"}, {"id": "Luiz_Eduardo-42_98878-6474-pai", "nome": "Luiz Eduardo", "tel": "42 98878-6474", "tipo": "10", "pontos": 3, "historico": [{"data": "30/03/2026", "tipo": "compra"}, {"data": "14/04/2026", "tipo": "compra"}, {"data": "14/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna PP", "cadastro": "30/03/2026", "contato": "Paiol"}, {"id": "Davi-42_98414-4757-paiol", "nome": "Davi", "tel": "42 98414-4757", "tipo": "10", "pontos": 1, "historico": [{"data": "06/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna PP", "cadastro": "06/04/2026", "contato": "Paiol"}, {"id": "Patrick-42_99863-7411-paiol", "nome": "Patrick", "tel": "42 99863-7411", "tipo": "10", "pontos": 1, "historico": [{"data": "12/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna PP", "cadastro": "12/04/2026", "contato": "Paiol"}, {"id": "Dani-42_98434-7147-rancho", "nome": "Dani", "tel": "42 98434-7147", "tipo": "10", "pontos": 1, "historico": [{"data": "10/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna PP", "cadastro": "10/04/2026", "contato": "Rancho"}, {"id": "Ana-42_99921-2885-paiol", "nome": "Ana", "tel": "42 99921-2885", "tipo": "10", "pontos": 1, "historico": [{"data": "09/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna PP", "cadastro": "09/04/2026", "contato": "Paiol"}, {"id": "Ariane-42_98404-1048-paiol", "nome": "Ariane", "tel": "42 98404-1048", "tipo": "10", "pontos": 1, "historico": [{"data": "02/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Filhote", "cadastro": "02/03/2026", "contato": "Paiol"}, {"id": "Ederson-42_98409-9186-paiol", "nome": "Ederson", "tel": "42 98409-9186", "tipo": "10", "pontos": 1, "historico": [{"data": "27/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Quidog 7kg", "cadastro": "27/03/2026", "contato": "Paiol"}, {"id": "Zeno-48_98429-8508-paiol", "nome": "Zeno", "tel": "48 98429-8508", "tipo": "10", "pontos": 1, "historico": [{"data": "11/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Quidog 7kg", "cadastro": "11/04/2026", "contato": "Paiol"}, {"id": "Lucas-42_99158-3021-paiol", "nome": "Lucas", "tel": "42 99158-3021", "tipo": "10", "pontos": 3, "historico": [{"data": "22/03/2026", "tipo": "compra"}, {"data": "06/04/2026", "tipo": "compra"}, {"data": "22/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Quidog 15kg", "cadastro": "22/03/2026", "contato": "Paiol"}, {"id": "Mainara-42_98421-6088-paiol", "nome": "Mainara", "tel": "42 98421-6088", "tipo": "10", "pontos": 2, "historico": [{"data": "17/02/2026", "tipo": "compra"}, {"data": "02/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Quidog 15kg", "cadastro": "17/02/2026", "contato": "Paiol"}, {"id": "Marilza-42_98402-3751-paiol", "nome": "Marilza", "tel": "42 98402-3751", "tipo": "10", "pontos": 1, "historico": [{"data": "02/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Quidog 15kg", "cadastro": "02/04/2026", "contato": "Paiol"}, {"id": "Cerli-42_92000-8708-paiol", "nome": "Cerli", "tel": "42 92000-8708", "tipo": "10", "pontos": 1, "historico": [{"data": "14/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Quidog 15kg", "cadastro": "14/04/2026", "contato": "Paiol"}, {"id": "Débora-42_99995-0560-paiol", "nome": "Débora", "tel": "42 99995-0560", "tipo": "10", "pontos": 1, "historico": [{"data": "12/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Quidog 15kg", "cadastro": "12/04/2026", "contato": "Paiol"}, {"id": "Adriel-42_99992-9494-paiol", "nome": "Adriel", "tel": "42 99992-9494", "tipo": "10", "pontos": 1, "historico": [{"data": "11/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Quidog 15kg", "cadastro": "11/04/2026", "contato": "Paiol"}, {"id": "Paulo-42_98817-1170-paiol", "nome": "Paulo", "tel": "42 98817-1170", "tipo": "10", "pontos": 1, "historico": [{"data": "11/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Quidog 15kg", "cadastro": "11/04/2026", "contato": "Paiol"}, {"id": "João_Túlio-42_99839-2457-paiol", "nome": "João Túlio", "tel": "42 99839-2457", "tipo": "10", "pontos": 1, "historico": [{"data": "11/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Quidog 15kg", "cadastro": "11/04/2026", "contato": "Paiol"}, {"id": "Elizeu-41_99943-7143-rancho", "nome": "Elizeu", "tel": "41 99943-7143", "tipo": "10", "pontos": 1, "historico": [{"data": "06/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Quidog 15kg", "cadastro": "06/04/2026", "contato": "Rancho"}, {"id": "Paulo-42_99841-9799-rancho", "nome": "Paulo", "tel": "42 99841-9799", "tipo": "10", "pontos": 1, "historico": [{"data": "17/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Quidog 15kg", "cadastro": "17/04/2026", "contato": "Rancho"}, {"id": "Luciana-42_99807-4005-paiol", "nome": "Luciana", "tel": "42 99807-4005", "tipo": "10", "pontos": 1, "historico": [{"data": "22/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Quidog 20kg", "cadastro": "22/03/2026", "contato": "Paiol"}, {"id": "Ivone-42_99937-1912-paiol", "nome": "Ivone", "tel": "42 99937-1912", "tipo": "10", "pontos": 2, "historico": [{"data": "26/01/2026", "tipo": "compra"}, {"data": "02/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Quidog 20kg", "cadastro": "26/01/2026", "contato": "Paiol"}, {"id": "Marcos-42_98424-1029-paiol", "nome": "Marcos", "tel": "42 98424-1029", "tipo": "10", "pontos": 1, "historico": [{"data": "02/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Quidog 20kg", "cadastro": "02/04/2026", "contato": "Paiol"}, {"id": "Rodrigo-42_99811-9220-paiol", "nome": "Rodrigo", "tel": "42 99811-9220", "tipo": "10", "pontos": 1, "historico": [{"data": "02/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "SD Gold", "cadastro": "02/04/2026", "contato": "Paiol"}, {"id": "Paola_Vendler-42_99138-6694-pa", "nome": "Paola Vendler", "tel": "42 99138-6694", "tipo": "10", "pontos": 1, "historico": [{"data": "21/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "SuperDog 25kg", "cadastro": "21/03/2026", "contato": "Paiol"}, {"id": "Fran-42_99974-3088-paiol", "nome": "Fran", "tel": "42 99974-3088", "tipo": "10", "pontos": 1, "historico": [{"data": "18/02/2026", "tipo": "compra"}], "resgates": 0, "racao": "SuperDog 25kg", "cadastro": "18/02/2026", "contato": "Paiol"}, {"id": "Erivelton_-_TS_Móveis-42_99858", "nome": "Erivelton - TS Móveis", "tel": "42 99858-6900", "tipo": "10", "pontos": 1, "historico": [{"data": "31/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "SuperDog 25kg", "cadastro": "31/03/2026", "contato": "Paiol"}, {"id": "Douglas-42_99832-6424-paiol", "nome": "Douglas", "tel": "42 99832-6424", "tipo": "10", "pontos": 1, "historico": [{"data": "10/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "SuperDog 25kg", "cadastro": "10/04/2026", "contato": "Paiol"}, {"id": "André-42_99875-1443-paiol", "nome": "André", "tel": "42 99875-1443", "tipo": "10", "pontos": 1, "historico": [{"data": "05/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "SuperDog 25kg", "cadastro": "05/04/2026", "contato": "Paiol"}, {"id": "Meri-42_99903-9612-paiol", "nome": "Meri", "tel": "42 99903-9612", "tipo": "10", "pontos": 1, "historico": [{"data": "10/12/2026", "tipo": "compra"}], "resgates": 0, "racao": "SuperDog 15kg", "cadastro": "10/12/2026", "contato": "Paiol"}, {"id": "Michele-42_99976-9515-paiol", "nome": "Michele", "tel": "42 99976-9515", "tipo": "10", "pontos": 3, "historico": [{"data": "26/03/2026", "tipo": "compra"}, {"data": "04/04/2026", "tipo": "compra"}, {"data": "21/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "SuperDog 15kg", "cadastro": "26/03/2026", "contato": "Paiol"}, {"id": "José_Carlos-42_98864-4300-paio", "nome": "José Carlos", "tel": "42 98864-4300", "tipo": "10", "pontos": 1, "historico": [{"data": "27/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "SuperDog 15kg", "cadastro": "27/03/2026", "contato": "Paiol"}, {"id": "Júnior-42_99978-5682-paiol", "nome": "Júnior", "tel": "42 99978-5682", "tipo": "10", "pontos": 2, "historico": [{"data": "31/03/2026", "tipo": "compra"}, {"data": "18/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "SuperDog 15kg", "cadastro": "31/03/2026", "contato": "Paiol"}, {"id": "Willian-42_99813-5258-paiol", "nome": "Willian", "tel": "42 99813-5258", "tipo": "10", "pontos": 1, "historico": [{"data": "02/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "SuperDog 15kg", "cadastro": "02/04/2026", "contato": "Paiol"}, {"id": "João_Calinoski-42_98428-6213-p", "nome": "João Calinoski", "tel": "42 98428-6213", "tipo": "10", "pontos": 1, "historico": [{"data": "18/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "SuperDog 15kg", "cadastro": "18/04/2026", "contato": "Paiol"}, {"id": "Marisa-42_99836-6123-paiol", "nome": "Marisa", "tel": "42 99836-6123", "tipo": "10", "pontos": 1, "historico": [{"data": "15/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "SuperDog 15kg", "cadastro": "15/04/2026", "contato": "Paiol"}, {"id": "Andriele-42_99971-6365-paiol", "nome": "Andriele", "tel": "42 99971-6365", "tipo": "10", "pontos": 1, "historico": [{"data": "30/12/2026", "tipo": "compra"}], "resgates": 0, "racao": "Nutrive Power", "cadastro": "30/12/2026", "contato": "Paiol"}, {"id": "Ana_Academia-42_99165-3057-pai", "nome": "Ana Academia", "tel": "42 99165-3057", "tipo": "10", "pontos": 1, "historico": [{"data": "10/02/2026", "tipo": "compra"}], "resgates": 0, "racao": "Nutrive Power", "cadastro": "10/02/2026", "contato": "Paiol"}, {"id": "Gustavo-42_9824-1247-paiol", "nome": "Gustavo", "tel": "42 9824-1247", "tipo": "10", "pontos": 1, "historico": [{"data": "13/01/2026", "tipo": "compra"}], "resgates": 0, "racao": "Nutrive Power", "cadastro": "13/01/2026", "contato": "Paiol"}, {"id": "Jean_Machado_-_F-42_98869-5607", "nome": "Jean Machado - F", "tel": "42 98869-5607", "tipo": "10", "pontos": 1, "historico": [{"data": "24/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Nutrive Power", "cadastro": "24/03/2026", "contato": "Rancho"}, {"id": "Fabiano-42_98888-5746-paiol", "nome": "Fabiano", "tel": "42 98888-5746", "tipo": "10", "pontos": 1, "historico": [{"data": "23/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Nutrive Power", "cadastro": "23/03/2026", "contato": "Paiol"}, {"id": "Motta_-_F-42_99996-3811-paiol", "nome": "Motta - F", "tel": "42 99996-3811", "tipo": "10", "pontos": 1, "historico": [{"data": "20/01/2026", "tipo": "compra"}], "resgates": 0, "racao": "Nutrive Power", "cadastro": "20/01/2026", "contato": "Paiol"}, {"id": "Leonan_-_20kg-42_99808-3791-pa", "nome": "Leonan - 20kg", "tel": "42 99808-3791", "tipo": "10", "pontos": 1, "historico": [{"data": "31/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Nutrive Power", "cadastro": "31/03/2026", "contato": "Paiol"}, {"id": "Dener-42_9990-9307-rancho", "nome": "Dener", "tel": "42 9990-9307", "tipo": "10", "pontos": 1, "historico": [{"data": "02/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Nutrive Power", "cadastro": "02/04/2026", "contato": "Rancho"}, {"id": "Eduardo-42_98412-4034-paiol", "nome": "Eduardo", "tel": "42 98412-4034", "tipo": "10", "pontos": 1, "historico": [{"data": "02/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Nutrive Power", "cadastro": "02/04/2026", "contato": "Paiol"}, {"id": "Felipe_Nadal-42_99934-7122-pai", "nome": "Felipe Nadal", "tel": "42 99934-7122", "tipo": "10", "pontos": 1, "historico": [{"data": "12/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Nutrive Power", "cadastro": "12/04/2026", "contato": "Paiol"}, {"id": "Luizão_Arquiteto_-_Vermelha-Se", "nome": "Luizão Arquiteto - Vermelha", "tel": "Sem telefone", "tipo": "10", "pontos": 3, "historico": [{"data": "25/03/2026", "tipo": "compra"}, {"data": "07/04/2026", "tipo": "compra"}, {"data": "24/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Nutrives", "cadastro": "25/03/2026", "contato": "Paiol"}, {"id": "Felipe_Dancoski_-_Vermelha-42_", "nome": "Felipe Dancoski - Vermelha", "tel": "42 9909-4528", "tipo": "10", "pontos": 2, "historico": [{"data": "26/03/2026", "tipo": "compra"}, {"data": "24/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Nutrives", "cadastro": "26/03/2026", "contato": "Paiol"}, {"id": "Luiza_Saad_-_Vermelha-41_99962", "nome": "Luiza Saad - Vermelha", "tel": "41 99962-4892", "tipo": "10", "pontos": 1, "historico": [{"data": "12/02/2026", "tipo": "compra"}], "resgates": 0, "racao": "Nutrives", "cadastro": "12/02/2026", "contato": "Paiol"}, {"id": "Rubia_-_Amarela-42_99907-9485-", "nome": "Rubia - Amarela", "tel": "42 99907-9485", "tipo": "10", "pontos": 1, "historico": [{"data": "14/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Nutrives", "cadastro": "14/04/2026", "contato": "Rancho"}, {"id": "Murilo_Oliveira-42_9109-9922-p", "nome": "Murilo Oliveira", "tel": "42 9109-9922", "tipo": "10", "pontos": 3, "historico": [{"data": "05/01/2026", "tipo": "compra"}, {"data": "19/02/2026", "tipo": "compra"}, {"data": "04/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Performa 15kg", "cadastro": "05/01/2026", "contato": "Paiol"}, {"id": "Edinaldo-42_99986-3948-paiol", "nome": "Edinaldo", "tel": "42 99986-3948", "tipo": "10", "pontos": 3, "historico": [{"data": "03/03/2026", "tipo": "compra"}, {"data": "29/03/2026", "tipo": "compra"}, {"data": "25/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Performa 15kg", "cadastro": "03/03/2026", "contato": "Paiol"}, {"id": "Dayane-42_8409-6093-paiol", "nome": "Dayane", "tel": "42 8409-6093", "tipo": "10", "pontos": 1, "historico": [{"data": "02/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Performa 15kg", "cadastro": "02/03/2026", "contato": "Paiol"}, {"id": "Débora-42_99810-3997-paiol", "nome": "Débora", "tel": "42 99810-3997", "tipo": "10", "pontos": 1, "historico": [{"data": "05/02/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "05/02/2026", "contato": "Paiol"}, {"id": "Vitor-42_9954-0311-rancho", "nome": "Vitor", "tel": "42 9954-0311", "tipo": "10", "pontos": 2, "historico": [{"data": "09/03/2026", "tipo": "compra"}, {"data": "06/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "09/03/2026", "contato": "Rancho"}, {"id": "Jane-42_9995-2759-rancho", "nome": "Jane", "tel": "42 9995-2759", "tipo": "10", "pontos": 2, "historico": [{"data": "21/03/2026", "tipo": "compra"}, {"data": "03/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "21/03/2026", "contato": "Rancho"}, {"id": "Everton-42_98889-3400-rancho", "nome": "Everton", "tel": "42 98889-3400", "tipo": "10", "pontos": 2, "historico": [{"data": "31/03/2026", "tipo": "compra"}, {"data": "24/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "31/03/2026", "contato": "Rancho"}, {"id": "Crisciely-42_9106-8297-rancho", "nome": "Crisciely", "tel": "42 9106-8297", "tipo": "10", "pontos": 1, "historico": [{"data": "08/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "08/04/2026", "contato": "Rancho"}, {"id": "Sérgio-42_99862-3147-paiol", "nome": "Sérgio", "tel": "42 99862-3147", "tipo": "10", "pontos": 1, "historico": [{"data": "26/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "26/03/2026", "contato": "Paiol"}, {"id": "Claudete-42_98834-5693-rancho", "nome": "Claudete", "tel": "42 98834-5693", "tipo": "10", "pontos": 1, "historico": [{"data": "30/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "30/03/2026", "contato": "Rancho"}, {"id": "Marcos_-_RP-42_98869-7268-ranc", "nome": "Marcos - RP", "tel": "42 98869-7268", "tipo": "10", "pontos": 1, "historico": [{"data": "31/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "31/03/2026", "contato": "Rancho"}, {"id": "Ricardo-42_99810-5374-rancho", "nome": "Ricardo", "tel": "42 99810-5374", "tipo": "10", "pontos": 1, "historico": [{"data": "31/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "31/03/2026", "contato": "Rancho"}, {"id": "Rose-42_99927-1309-paiol", "nome": "Rose", "tel": "42 99927-1309", "tipo": "10", "pontos": 1, "historico": [{"data": "04/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "04/04/2026", "contato": "Paiol"}, {"id": "Wellinton-42_99818-9494-rancho", "nome": "Wellinton", "tel": "42 99818-9494", "tipo": "10", "pontos": 1, "historico": [{"data": "11/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "11/04/2026", "contato": "Rancho"}, {"id": "Márcio-42_99969-0477-rancho", "nome": "Márcio", "tel": "42 99969-0477", "tipo": "10", "pontos": 1, "historico": [{"data": "09/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "09/04/2026", "contato": "Rancho"}, {"id": "Amanda-42_99828-7737-rancho", "nome": "Amanda", "tel": "42 99828-7737", "tipo": "10", "pontos": 1, "historico": [{"data": "08/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "08/04/2026", "contato": "Rancho"}, {"id": "Adir-42_99964-6528-rancho", "nome": "Adir", "tel": "42 99964-6528", "tipo": "10", "pontos": 1, "historico": [{"data": "08/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "08/04/2026", "contato": "Rancho"}, {"id": "Edcarlos-42_99903-1322-rancho", "nome": "Edcarlos", "tel": "42 99903-1322", "tipo": "10", "pontos": 1, "historico": [{"data": "07/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "07/04/2026", "contato": "Rancho"}, {"id": "Marcelo-42_99935-2227-rancho", "nome": "Marcelo", "tel": "42 99935-2227", "tipo": "10", "pontos": 1, "historico": [{"data": "14/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "14/04/2026", "contato": "Rancho"}, {"id": "Samera-42_99905-3610-rancho", "nome": "Samera", "tel": "42 99905-3610", "tipo": "10", "pontos": 1, "historico": [{"data": "22/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "22/04/2026", "contato": "Rancho"}, {"id": "Lucinei-42_98444-5524-rancho", "nome": "Lucinei", "tel": "42 98444-5524", "tipo": "10", "pontos": 1, "historico": [{"data": "20/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "20/04/2026", "contato": "Rancho"}, {"id": "Mário_Cesar-42_99926-2454-paio", "nome": "Mário Cesar", "tel": "42 99926-2454", "tipo": "10", "pontos": 1, "historico": [{"data": "15/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "15/04/2026", "contato": "Paiol"}, {"id": "Si_França-42_99903-5149-paiol", "nome": "Si França", "tel": "42 99903-5149", "tipo": "10", "pontos": 2, "historico": [{"data": "12/03/2026", "tipo": "compra"}, {"data": "11/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "12/03/2026", "contato": "Paiol"}, {"id": "Reni-42_98888-7290-rancho", "nome": "Reni", "tel": "42 98888-7290", "tipo": "10", "pontos": 1, "historico": [{"data": "26/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "26/03/2026", "contato": "Rancho"}, {"id": "Erick-42_9842-3926-paiol", "nome": "Erick", "tel": "42 9842-3926", "tipo": "10", "pontos": 2, "historico": [{"data": "25/03/2026", "tipo": "compra"}, {"data": "11/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "25/03/2026", "contato": "Paiol"}, {"id": "Murilo-42_99864-7979-rancho", "nome": "Murilo", "tel": "42 99864-7979", "tipo": "10", "pontos": 1, "historico": [{"data": "26/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "26/03/2026", "contato": "Rancho"}, {"id": "Vanderlei_-_Barba-42_99917-659", "nome": "Vanderlei - Barba", "tel": "42 99917-6590", "tipo": "10", "pontos": 4, "historico": [{"data": "27/03/2026", "tipo": "compra"}, {"data": "13/04/2026", "tipo": "compra"}, {"data": "13/04/2026", "tipo": "compra"}, {"data": "22/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "27/03/2026", "contato": "Paiol"}, {"id": "Thais-42_9910-0805-paiol", "nome": "Thais", "tel": "42 9910-0805", "tipo": "10", "pontos": 1, "historico": [{"data": "27/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "27/03/2026", "contato": "Paiol"}, {"id": "Isaac-42_99828-7864-rancho", "nome": "Isaac", "tel": "42 99828-7864", "tipo": "10", "pontos": 3, "historico": [{"data": "27/03/2026", "tipo": "compra"}, {"data": "27/03/2026", "tipo": "compra"}, {"data": "27/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "27/03/2026", "contato": "Rancho"}, {"id": "Gislene-42_99967-8271-rancho", "nome": "Gislene", "tel": "42 99967-8271", "tipo": "10", "pontos": 1, "historico": [{"data": "06/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "06/04/2026", "contato": "Rancho"}, {"id": "Marcelo-42_99819-8527-paiol", "nome": "Marcelo", "tel": "42 99819-8527", "tipo": "10", "pontos": 1, "historico": [{"data": "14/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "14/04/2026", "contato": "Paiol"}, {"id": "Cirineu-42_99871-6680-paiol", "nome": "Cirineu", "tel": "42 99871-6680", "tipo": "10", "pontos": 1, "historico": [{"data": "13/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "13/04/2026", "contato": "Paiol"}, {"id": "Nicolas-42_99989-4170-paiol", "nome": "Nicolas", "tel": "42 99989-4170", "tipo": "10", "pontos": 1, "historico": [{"data": "07/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "07/04/2026", "contato": "Paiol"}, {"id": "Caroline-42_99911-7496-rancho", "nome": "Caroline", "tel": "42 99911-7496", "tipo": "10", "pontos": 1, "historico": [{"data": "06/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "06/04/2026", "contato": "Rancho"}, {"id": "Jane-42_99940-1797-paiol", "nome": "Jane", "tel": "42 99940-1797", "tipo": "10", "pontos": 1, "historico": [{"data": "04/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "04/04/2026", "contato": "Paiol"}, {"id": "Gabriele-42_98435-9214-paiol", "nome": "Gabriele", "tel": "42 98435-9214", "tipo": "10", "pontos": 1, "historico": [{"data": "21/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "21/04/2026", "contato": "Paiol"}, {"id": "Fábio-42_98401-0167-rancho", "nome": "Fábio", "tel": "42 98401-0167", "tipo": "10", "pontos": 1, "historico": [{"data": "24/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "24/04/2026", "contato": "Rancho"}, {"id": "Ricardo-42_99988-9559-paiol", "nome": "Ricardo", "tel": "42 99988-9559", "tipo": "10", "pontos": 2, "historico": [{"data": "24/04/2026", "tipo": "compra"}, {"data": "24/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "24/04/2026", "contato": "Paiol"}, {"id": "Thabata-42_98869-6117-paiol", "nome": "Thabata", "tel": "42 98869-6117", "tipo": "10", "pontos": 1, "historico": [{"data": "23/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "23/04/2026", "contato": "Paiol"}, {"id": "Cristina-42_99833-7487-paiol", "nome": "Cristina", "tel": "42 99833-7487", "tipo": "10", "pontos": 1, "historico": [{"data": "18/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "18/04/2026", "contato": "Paiol"}, {"id": "Janaina-42_98427-8758-rancho", "nome": "Janaina", "tel": "42 98427-8758", "tipo": "10", "pontos": 1, "historico": [{"data": "16/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "16/04/2026", "contato": "Rancho"}, {"id": "Silvano-41_99932-6516-paiol", "nome": "Silvano", "tel": "41 99932-6516", "tipo": "10", "pontos": 1, "historico": [{"data": "16/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "16/04/2026", "contato": "Paiol"}, {"id": "Rosângela-42_99901-2241-paiol", "nome": "Rosângela", "tel": "42 99901-2241", "tipo": "10", "pontos": 1, "historico": [{"data": "15/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "15/04/2026", "contato": "Paiol"}, {"id": "Ka_Cliente-42_99827-3202-paiol", "nome": "Ka Cliente", "tel": "42 99827-3202", "tipo": "10", "pontos": 2, "historico": [{"data": "09/03/2026", "tipo": "compra"}, {"data": "02/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Rango", "cadastro": "09/03/2026", "contato": "Paiol"}, {"id": "Milaine-42_99144-5680-paiol", "nome": "Milaine", "tel": "42 99144-5680", "tipo": "10", "pontos": 1, "historico": [{"data": "27/02/2026", "tipo": "compra"}], "resgates": 0, "racao": "Rango", "cadastro": "27/02/2026", "contato": "Paiol"}, {"id": "Cristiano-42_99137-5362-paiol", "nome": "Cristiano", "tel": "42 99137-5362", "tipo": "10", "pontos": 1, "historico": [{"data": "01/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Rango", "cadastro": "01/03/2026", "contato": "Paiol"}, {"id": "Francisca-42_98422-2964-rancho", "nome": "Francisca", "tel": "42 98422-2964", "tipo": "10", "pontos": 1, "historico": [{"data": "31/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Rango", "cadastro": "31/03/2026", "contato": "Rancho"}, {"id": "Tais-42_99991-0805-paiol", "nome": "Tais", "tel": "42 99991-0805", "tipo": "10", "pontos": 1, "historico": [{"data": "08/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Rango", "cadastro": "08/04/2026", "contato": "Paiol"}, {"id": "Ariel-42_99834-2634-rancho", "nome": "Ariel", "tel": "42 99834-2634", "tipo": "10", "pontos": 1, "historico": [{"data": "07/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Rango", "cadastro": "07/04/2026", "contato": "Rancho"}, {"id": "Adriana-42_98414-8863-paiol", "nome": "Adriana", "tel": "42 98414-8863", "tipo": "10", "pontos": 1, "historico": [{"data": "26/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Dog Choni", "cadastro": "26/03/2026", "contato": "Paiol"}, {"id": "Cat_Choni_-_Carina-9_3300-1367", "nome": "Cat Choni - Carina", "tel": "9 3300-1367", "tipo": "10", "pontos": 1, "historico": [{"data": "10/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Dog Choni", "cadastro": "10/04/2026", "contato": "Rancho"}, {"id": "Rhaian-42_9920-5548-rancho", "nome": "Rhaian", "tel": "42 9920-5548", "tipo": "10", "pontos": 1, "historico": [{"data": "13/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Ração de Cavalo", "cadastro": "13/03/2026", "contato": "Rancho"}, {"id": "Edino-42_9147-3185-rancho", "nome": "Edino", "tel": "42 9147-3185", "tipo": "10", "pontos": 0, "historico": [], "resgates": 0, "racao": "Ração de Cavalo", "cadastro": "01/01/2026", "contato": "Rancho"}, {"id": "Cesar-42_9954-6928-rancho", "nome": "Cesar", "tel": "42 9954-6928", "tipo": "10", "pontos": 1, "historico": [{"data": "13/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Ração de Cavalo", "cadastro": "13/03/2026", "contato": "Rancho"}, {"id": "Israel-42_98891-1346-rancho", "nome": "Israel", "tel": "42 98891-1346", "tipo": "10", "pontos": 1, "historico": [{"data": "24/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Ração de Cavalo", "cadastro": "24/03/2026", "contato": "Rancho"}, {"id": "Ricardo_Horst-42_9146-0481-ran", "nome": "Ricardo Horst", "tel": "42 9146-0481", "tipo": "10", "pontos": 1, "historico": [{"data": "07/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Ração de Cavalo", "cadastro": "07/03/2026", "contato": "Rancho"}];
 
-const fb = initializeApp({
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, signInAnonymously } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, collection, doc, setDoc, deleteDoc, getDocs, writeBatch } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const app = initializeApp({
   apiKey:"AIzaSyDiE87XZkpIMUCC9dvgzgH6GuVjTs6Z2Ro",
   authDomain:"fidelidade-paiol-e-rancho.firebaseapp.com",
   projectId:"fidelidade-paiol-e-rancho",
@@ -198,363 +191,399 @@ const fb = initializeApp({
   messagingSenderId:"643582241789",
   appId:"1:643582241789:web:a78068801842269d028794"
 });
-const db = getFirestore(fb);
+
+const auth = getAuth(app);
+const db = getFirestore(app);
 const col = collection(db, 'clientes');
 
-// ── ESTADO LOCAL (fonte de verdade) ────────────────────
-// SEM onSnapshot. Usamos getDocs para carregar e
-// atualizamos o array local a cada operação.
-// Botão "Sincronizar" recarrega do Firebase quando necessário.
+let C = [];
+let filtroAtivo = 'todos';
+let crmFiltroAtivo = 'todos';
+let pgAtual = 1;
+const POR_PAG = 25;
+const crmMsgs = {};
 
-let clientes = [];
-let filterAtivo = 'todos', crmFilter = 'todos', currentPage = 1;
-const PER_PAGE = 25;
-const DADOS = [{"id": "Lucas-42_99856-4230-paiol", "nome": "Lucas", "tel": "42 99856-4230", "tipo": "10", "pontos": 1, "historico": [{"data": "21/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "21/03/2026", "contato": "Paiol"}, {"id": "Alaor-42_98445-5603-paiol", "nome": "Alaor", "tel": "42 98445-5603", "tipo": "10", "pontos": 1, "historico": [{"data": "21/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "21/03/2026", "contato": "Paiol"}, {"id": "Adriane-42_98811-9122-paiol", "nome": "Adriane", "tel": "42 98811-9122", "tipo": "10", "pontos": 1, "historico": [{"data": "17/02/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "17/02/2026", "contato": "Paiol"}, {"id": "Guilherme-42_99814-4901-paiol", "nome": "Guilherme", "tel": "42 99814-4901", "tipo": "10", "pontos": 2, "historico": [{"data": "19/02/2026", "tipo": "compra"}, {"data": "04/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "19/02/2026", "contato": "Paiol"}, {"id": "Luciana-42_99992-5582-paiol", "nome": "Luciana", "tel": "42 99992-5582", "tipo": "10", "pontos": 2, "historico": [{"data": "11/02/2026", "tipo": "compra"}, {"data": "25/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "11/02/2026", "contato": "Paiol"}, {"id": "Guilherme-42_9957-8008-paiol", "nome": "Guilherme", "tel": "42 9957-8008", "tipo": "10", "pontos": 1, "historico": [{"data": "24/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "24/03/2026", "contato": "Paiol"}, {"id": "Maycon-42_99922-4085-paiol", "nome": "Maycon", "tel": "42 99922-4085", "tipo": "10", "pontos": 1, "historico": [{"data": "16/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "16/03/2026", "contato": "Paiol"}, {"id": "Ferreira-42_98818-2830-paiol", "nome": "Ferreira", "tel": "42 98818-2830", "tipo": "10", "pontos": 1, "historico": [{"data": "14/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "14/03/2026", "contato": "Paiol"}, {"id": "Leo-42_99954-4766-paiol", "nome": "Leo", "tel": "42 99954-4766", "tipo": "10", "pontos": 1, "historico": [{"data": "16/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "16/03/2026", "contato": "Paiol"}, {"id": "Luis-42_99992-5682-paiol", "nome": "Luis", "tel": "42 99992-5682", "tipo": "10", "pontos": 1, "historico": [{"data": "12/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "12/03/2026", "contato": "Paiol"}, {"id": "Daiane-42_98823-0674-paiol", "nome": "Daiane", "tel": "42 98823-0674", "tipo": "10", "pontos": 1, "historico": [{"data": "10/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "10/03/2026", "contato": "Paiol"}, {"id": "Maycon-42_8428-1299-paiol", "nome": "Maycon", "tel": "42 8428-1299", "tipo": "10", "pontos": 3, "historico": [{"data": "25/03/2026", "tipo": "compra"}, {"data": "10/04/2026", "tipo": "compra"}, {"data": "27/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "25/03/2026", "contato": "Paiol"}, {"id": "?-42_9910-4147-paiol", "nome": "?", "tel": "42 9910-4147", "tipo": "10", "pontos": 1, "historico": [{"data": "21/02/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "21/02/2026", "contato": "Paiol"}, {"id": "Marcos_Bueno-42_99153-4863-pai", "nome": "Marcos Bueno", "tel": "42 99153-4863", "tipo": "10", "pontos": 2, "historico": [{"data": "21/02/2026", "tipo": "compra"}, {"data": "01/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "21/02/2026", "contato": "Paiol"}, {"id": "Márcio-42_99975-9349-paiol", "nome": "Márcio", "tel": "42 99975-9349", "tipo": "10", "pontos": 2, "historico": [{"data": "24/02/2026", "tipo": "compra"}, {"data": "18/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "24/02/2026", "contato": "Paiol"}, {"id": "Ederson-42_99801-2071-paiol", "nome": "Ederson", "tel": "42 99801-2071", "tipo": "10", "pontos": 2, "historico": [{"data": "03/03/2026", "tipo": "compra"}, {"data": "08/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "03/03/2026", "contato": "Paiol"}, {"id": "Céia-42_99806-7776-paiol", "nome": "Céia", "tel": "42 99806-7776", "tipo": "10", "pontos": 2, "historico": [{"data": "06/03/2026", "tipo": "compra"}, {"data": "07/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "06/03/2026", "contato": "Paiol"}, {"id": "Tati-42_99942-1049-rancho", "nome": "Tati", "tel": "42 99942-1049", "tipo": "10", "pontos": 1, "historico": [{"data": "20/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "20/03/2026", "contato": "Rancho"}, {"id": "Leonardo-42_99829-2649-rancho", "nome": "Leonardo", "tel": "42 99829-2649", "tipo": "10", "pontos": 2, "historico": [{"data": "25/03/2026", "tipo": "compra"}, {"data": "25/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "25/03/2026", "contato": "Rancho"}, {"id": "Wagner-42_9933-5468-paiol", "nome": "Wagner", "tel": "42 9933-5468", "tipo": "10", "pontos": 1, "historico": [{"data": "16/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "16/03/2026", "contato": "Paiol"}, {"id": "Mariana-42_9835-9684-paiol", "nome": "Mariana", "tel": "42 9835-9684", "tipo": "10", "pontos": 1, "historico": [{"data": "27/01/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "27/01/2026", "contato": "Paiol"}, {"id": "Juliano-42_99810-4960-paiol", "nome": "Juliano", "tel": "42 99810-4960", "tipo": "10", "pontos": 3, "historico": [{"data": "26/02/2026", "tipo": "compra"}, {"data": "10/04/2026", "tipo": "compra"}, {"data": "10/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "26/02/2026", "contato": "Paiol"}, {"id": "Michelle-42_8868-0101-paiol", "nome": "Michelle", "tel": "42 8868-0101", "tipo": "10", "pontos": 1, "historico": [{"data": "26/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "26/03/2026", "contato": "Paiol"}, {"id": "Ana-42_99933-8729-rancho", "nome": "Ana", "tel": "42 99933-8729", "tipo": "10", "pontos": 1, "historico": [{"data": "26/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "26/03/2026", "contato": "Rancho"}, {"id": "Orion-42_99975-5378-paiol", "nome": "Orion", "tel": "42 99975-5378", "tipo": "10", "pontos": 2, "historico": [{"data": "26/03/2026", "tipo": "compra"}, {"data": "06/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "26/03/2026", "contato": "Paiol"}, {"id": "Neguinho-42_99954-5523-rancho", "nome": "Neguinho", "tel": "42 99954-5523", "tipo": "10", "pontos": 1, "historico": [{"data": "27/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "27/03/2026", "contato": "Rancho"}, {"id": "Diego-42_99119-4662-paiol", "nome": "Diego", "tel": "42 99119-4662", "tipo": "10", "pontos": 1, "historico": [{"data": "30/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "30/03/2026", "contato": "Paiol"}, {"id": "Lais_D'aquino-42_98860-3219-pa", "nome": "Lais D'aquino", "tel": "42 98860-3219", "tipo": "10", "pontos": 1, "historico": [{"data": "31/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "31/03/2026", "contato": "Paiol"}, {"id": "Sandro-42_99113-5154-paiol", "nome": "Sandro", "tel": "42 99113-5154", "tipo": "10", "pontos": 1, "historico": [{"data": "30/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "30/03/2026", "contato": "Paiol"}, {"id": "Oslei-42_99813-7038-paiol", "nome": "Oslei", "tel": "42 99813-7038", "tipo": "10", "pontos": 1, "historico": [{"data": "31/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "31/03/2026", "contato": "Paiol"}, {"id": "Airton-Sem_telefone-paiol", "nome": "Airton", "tel": "Sem telefone", "tipo": "10", "pontos": 0, "historico": [], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "01/01/2026", "contato": "Paiol"}, {"id": "Solange-42_99827-9073-paiol", "nome": "Solange", "tel": "42 99827-9073", "tipo": "10", "pontos": 1, "historico": [{"data": "13/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "13/04/2026", "contato": "Paiol"}, {"id": "Adriana-42_99967-4399-rancho", "nome": "Adriana", "tel": "42 99967-4399", "tipo": "10", "pontos": 2, "historico": [{"data": "13/04/2026", "tipo": "compra"}, {"data": "13/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "13/04/2026", "contato": "Rancho"}, {"id": "Sancho-42_99113-5154-paiol", "nome": "Sancho", "tel": "42 99113-5154", "tipo": "10", "pontos": 1, "historico": [{"data": "13/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "13/04/2026", "contato": "Paiol"}, {"id": "Eli_Zainedi-42_99956-8756-paio", "nome": "Eli Zainedi", "tel": "42 99956-8756", "tipo": "10", "pontos": 1, "historico": [{"data": "12/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "12/04/2026", "contato": "Paiol"}, {"id": "Bruna-42_99904-5175-paiol", "nome": "Bruna", "tel": "42 99904-5175", "tipo": "10", "pontos": 1, "historico": [{"data": "12/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "12/04/2026", "contato": "Paiol"}, {"id": "Jonathan-42_98842-8413-rancho", "nome": "Jonathan", "tel": "42 98842-8413", "tipo": "10", "pontos": 1, "historico": [{"data": "11/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "11/04/2026", "contato": "Rancho"}, {"id": "Odair-42_99964-8469-paiol", "nome": "Odair", "tel": "42 99964-8469", "tipo": "10", "pontos": 1, "historico": [{"data": "10/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "10/04/2026", "contato": "Paiol"}, {"id": "Emerson-42_99836-0604-rancho", "nome": "Emerson", "tel": "42 99836-0604", "tipo": "10", "pontos": 1, "historico": [{"data": "09/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "09/04/2026", "contato": "Rancho"}, {"id": "Geovani-42_99105-0836-paiol", "nome": "Geovani", "tel": "42 99105-0836", "tipo": "10", "pontos": 2, "historico": [{"data": "09/04/2026", "tipo": "compra"}, {"data": "09/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "09/04/2026", "contato": "Paiol"}, {"id": "Artur-92_985903280-rancho", "nome": "Artur", "tel": "92 985903280", "tipo": "10", "pontos": 1, "historico": [{"data": "08/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "08/04/2026", "contato": "Rancho"}, {"id": "Wilson-42_99946-0571-paiol", "nome": "Wilson", "tel": "42 99946-0571", "tipo": "10", "pontos": 1, "historico": [{"data": "07/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "07/04/2026", "contato": "Paiol"}, {"id": "Josué-47_99605-3325-paiol", "nome": "Josué", "tel": "47 99605-3325", "tipo": "10", "pontos": 1, "historico": [{"data": "06/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "06/04/2026", "contato": "Paiol"}, {"id": "Silvana-42_98838-6663-paiol", "nome": "Silvana", "tel": "42 98838-6663", "tipo": "10", "pontos": 1, "historico": [{"data": "06/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "06/04/2026", "contato": "Paiol"}, {"id": "Diegão-42_99815-3435-rancho", "nome": "Diegão", "tel": "42 99815-3435", "tipo": "10", "pontos": 1, "historico": [{"data": "14/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "14/04/2026", "contato": "Rancho"}, {"id": "Thiago-42_99822-3610-rancho", "nome": "Thiago", "tel": "42 99822-3610", "tipo": "10", "pontos": 2, "historico": [{"data": "22/04/2026", "tipo": "compra"}, {"data": "22/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "22/04/2026", "contato": "Rancho"}, {"id": "Joelson-42_99915-4739-paiol", "nome": "Joelson", "tel": "42 99915-4739", "tipo": "10", "pontos": 1, "historico": [{"data": "21/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "21/04/2026", "contato": "Paiol"}, {"id": "Gustavo-42_99155-3272-paiol", "nome": "Gustavo", "tel": "42 99155-3272", "tipo": "10", "pontos": 2, "historico": [{"data": "16/04/2026", "tipo": "compra"}, {"data": "16/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "16/04/2026", "contato": "Paiol"}, {"id": "Andreia-42_98408-3780-paiol", "nome": "Andreia", "tel": "42 98408-3780", "tipo": "10", "pontos": 1, "historico": [{"data": "15/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 20kg", "cadastro": "15/04/2026", "contato": "Paiol"}, {"id": "D_S-42_99918-6608-paiol", "nome": "D S", "tel": "42 99918-6608", "tipo": "10", "pontos": 2, "historico": [{"data": "04/03/2026", "tipo": "compra"}, {"data": "11/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "04/03/2026", "contato": "Paiol"}, {"id": "Raquel-42_99841-8509-paiol", "nome": "Raquel", "tel": "42 99841-8509", "tipo": "10", "pontos": 1, "historico": [{"data": "13/12/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "13/12/2026", "contato": "Paiol"}, {"id": "Ana_Paula-42_99911-1540-paiol", "nome": "Ana Paula", "tel": "42 99911-1540", "tipo": "10", "pontos": 1, "historico": [{"data": "05/01/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "05/01/2026", "contato": "Paiol"}, {"id": "Chele-42_99834-3178-paiol", "nome": "Chele", "tel": "42 99834-3178", "tipo": "10", "pontos": 2, "historico": [{"data": "23/02/2026", "tipo": "compra"}, {"data": "13/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "23/02/2026", "contato": "Paiol"}, {"id": "Gustavo-42_99849-1309-paiol", "nome": "Gustavo", "tel": "42 99849-1309", "tipo": "10", "pontos": 1, "historico": [{"data": "18/02/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "18/02/2026", "contato": "Paiol"}, {"id": "Carlos-42_99937-2110-rancho", "nome": "Carlos", "tel": "42 99937-2110", "tipo": "10", "pontos": 1, "historico": [{"data": "24/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "24/03/2026", "contato": "Rancho"}, {"id": "Luciana-42_9992-5582-paiol", "nome": "Luciana", "tel": "42 9992-5582", "tipo": "10", "pontos": 2, "historico": [{"data": "11/02/2026", "tipo": "compra"}, {"data": "25/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "11/02/2026", "contato": "Paiol"}, {"id": "Deusa-42_98876-0345-paiol", "nome": "Deusa", "tel": "42 98876-0345", "tipo": "10", "pontos": 2, "historico": [{"data": "07/03/2026", "tipo": "compra"}, {"data": "07/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "07/03/2026", "contato": "Paiol"}, {"id": "Raissa-73_9848-7671-rancho", "nome": "Raissa", "tel": "73 9848-7671", "tipo": "10", "pontos": 1, "historico": [{"data": "16/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "16/03/2026", "contato": "Rancho"}, {"id": "Daniel_Alves-43_99927-8628-pai", "nome": "Daniel Alves", "tel": "43 99927-8628", "tipo": "10", "pontos": 1, "historico": [{"data": "01/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "01/03/2026", "contato": "Paiol"}, {"id": "Rafaela-42_99837-4094-paiol", "nome": "Rafaela", "tel": "42 99837-4094", "tipo": "10", "pontos": 4, "historico": [{"data": "26/03/2026", "tipo": "compra"}, {"data": "02/04/2026", "tipo": "compra"}, {"data": "11/04/2026", "tipo": "compra"}, {"data": "18/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "26/03/2026", "contato": "Paiol"}, {"id": "Antônio-42_98406-1214-paiol", "nome": "Antônio", "tel": "42 98406-1214", "tipo": "10", "pontos": 1, "historico": [{"data": "27/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "27/03/2026", "contato": "Paiol"}, {"id": "Mateus-42_99943-3097-paiol", "nome": "Mateus", "tel": "42 99943-3097", "tipo": "10", "pontos": 1, "historico": [{"data": "31/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "31/03/2026", "contato": "Paiol"}, {"id": "Vilso-42_99975-8873-rancho", "nome": "Vilso", "tel": "42 99975-8873", "tipo": "10", "pontos": 1, "historico": [{"data": "01/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "01/04/2026", "contato": "Rancho"}, {"id": "Allan-42_99918-1294-paiol", "nome": "Allan", "tel": "42 99918-1294", "tipo": "10", "pontos": 1, "historico": [{"data": "13/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "13/04/2026", "contato": "Paiol"}, {"id": "André-42_99950-6616-paiol", "nome": "André", "tel": "42 99950-6616", "tipo": "10", "pontos": 1, "historico": [{"data": "12/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "12/04/2026", "contato": "Paiol"}, {"id": "Gabriel-42_98868-9227-rancho", "nome": "Gabriel", "tel": "42 98868-9227", "tipo": "10", "pontos": 1, "historico": [{"data": "10/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "10/04/2026", "contato": "Rancho"}, {"id": "Matheus_Nunes-42_99863-0283-ra", "nome": "Matheus Nunes", "tel": "42 99863-0283", "tipo": "10", "pontos": 1, "historico": [{"data": "10/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "10/04/2026", "contato": "Rancho"}, {"id": "Denise-42_99960-7591-paiol", "nome": "Denise", "tel": "42 99960-7591", "tipo": "10", "pontos": 1, "historico": [{"data": "10/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "10/04/2026", "contato": "Paiol"}, {"id": "José_Maurício-42_99948-9546-ra", "nome": "José Maurício", "tel": "42 99948-9546", "tipo": "10", "pontos": 1, "historico": [{"data": "09/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "09/04/2026", "contato": "Rancho"}, {"id": "Jefferson-98402-3025-rancho", "nome": "Jefferson", "tel": "98402-3025", "tipo": "10", "pontos": 1, "historico": [{"data": "09/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "09/04/2026", "contato": "Rancho"}, {"id": "Luciana-42_99857-3898-paiol", "nome": "Luciana", "tel": "42 99857-3898", "tipo": "10", "pontos": 1, "historico": [{"data": "07/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "07/04/2026", "contato": "Paiol"}, {"id": "Willian-42_99857-0817-rancho", "nome": "Willian", "tel": "42 99857-0817", "tipo": "10", "pontos": 1, "historico": [{"data": "21/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "21/04/2026", "contato": "Rancho"}, {"id": "Jair-42_99115-9115-paiol", "nome": "Jair", "tel": "42 99115-9115", "tipo": "10", "pontos": 2, "historico": [{"data": "17/04/2026", "tipo": "compra"}, {"data": "17/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "17/04/2026", "contato": "Paiol"}, {"id": "Woicheski-Sem_telefone-paiol", "nome": "Woicheski", "tel": "Sem telefone", "tipo": "10", "pontos": 1, "historico": [{"data": "16/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog 15kg", "cadastro": "16/04/2026", "contato": "Paiol"}, {"id": "Lucas-42_99829-9658-paiol", "nome": "Lucas", "tel": "42 99829-9658", "tipo": "10", "pontos": 1, "historico": [{"data": "30/01/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog Vegetais", "cadastro": "30/01/2026", "contato": "Paiol"}, {"id": "Tate_Montes-42_9144-9738-paiol", "nome": "Tate Montes", "tel": "42 9144-9738", "tipo": "10", "pontos": 3, "historico": [{"data": "25/03/2026", "tipo": "compra"}, {"data": "13/04/2026", "tipo": "compra"}, {"data": "28/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog Vegetais", "cadastro": "25/03/2026", "contato": "Paiol"}, {"id": "Moisés-42_99929-6466-paiol", "nome": "Moisés", "tel": "42 99929-6466", "tipo": "10", "pontos": 1, "historico": [{"data": "05/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog Vegetais", "cadastro": "05/03/2026", "contato": "Paiol"}, {"id": "Gil-42_99969-7055-rancho", "nome": "Gil", "tel": "42 99969-7055", "tipo": "10", "pontos": 1, "historico": [{"data": "30/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog Vegetais", "cadastro": "30/03/2026", "contato": "Rancho"}, {"id": "Adriele-42_99911-3792-paiol", "nome": "Adriele", "tel": "42 99911-3792", "tipo": "10", "pontos": 1, "historico": [{"data": "31/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog Vegetais", "cadastro": "31/03/2026", "contato": "Paiol"}, {"id": "Paulo-42_99864-5633-paiol", "nome": "Paulo", "tel": "42 99864-5633", "tipo": "10", "pontos": 1, "historico": [{"data": "01/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog Vegetais", "cadastro": "01/04/2026", "contato": "Paiol"}, {"id": "Adelair_Delinha-42_99838-6068-", "nome": "Adelair/Delinha", "tel": "42 99838-6068", "tipo": "10", "pontos": 1, "historico": [{"data": "25/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog PP", "cadastro": "25/03/2026", "contato": "Paiol"}, {"id": "Ana-42_9993-5889-rancho", "nome": "Ana", "tel": "42 9993-5889", "tipo": "10", "pontos": 1, "historico": [{"data": "17/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog PP", "cadastro": "17/03/2026", "contato": "Rancho"}, {"id": "Cassi-42_9865-3575-rancho", "nome": "Cassi", "tel": "42 9865-3575", "tipo": "10", "pontos": 1, "historico": [{"data": "09/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog PP", "cadastro": "09/03/2026", "contato": "Rancho"}, {"id": "Marcelo-42_99981-2223-paiol", "nome": "Marcelo", "tel": "42 99981-2223", "tipo": "10", "pontos": 1, "historico": [{"data": "30/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Dog PP", "cadastro": "30/03/2026", "contato": "Paiol"}, {"id": "Kay-42_9839-4435-paiol", "nome": "Kay", "tel": "42 9839-4435", "tipo": "10", "pontos": 1, "historico": [{"data": "10/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "UltraLife MGP", "cadastro": "10/03/2026", "contato": "Paiol"}, {"id": "Robinho-42_99987-9936-paiol", "nome": "Robinho", "tel": "42 99987-9936", "tipo": "10", "pontos": 1, "historico": [{"data": "05/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "UltraLife MGP", "cadastro": "05/04/2026", "contato": "Paiol"}, {"id": "Raquel_-_SD_Sênior-42_99841-85", "nome": "Raquel - SD Sênior", "tel": "42 99841-8509", "tipo": "10", "pontos": 1, "historico": [{"data": "09/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "UltraLife MGP", "cadastro": "09/04/2026", "contato": "Paiol"}, {"id": "Mychele_-_Gato-42_93300-5827-p", "nome": "Mychele - Gato", "tel": "42 93300-5827", "tipo": "10", "pontos": 1, "historico": [{"data": "25/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "BioNatural", "cadastro": "25/03/2026", "contato": "Paiol"}, {"id": "Ivana-42_99161-0404-paiol", "nome": "Ivana", "tel": "42 99161-0404", "tipo": "10", "pontos": 1, "historico": [{"data": "02/02/2026", "tipo": "compra"}], "resgates": 0, "racao": "BioNatural", "cadastro": "02/02/2026", "contato": "Paiol"}, {"id": "Nilton-42_99135-6281-paiol", "nome": "Nilton", "tel": "42 99135-6281", "tipo": "10", "pontos": 0, "historico": [], "resgates": 0, "racao": "BioNatural", "cadastro": "01/01/2026", "contato": "Paiol"}, {"id": "Wesley-Sem_telefone-paiol", "nome": "Wesley", "tel": "Sem telefone", "tipo": "10", "pontos": 0, "historico": [], "resgates": 0, "racao": "BioNatural", "cadastro": "01/01/2026", "contato": "Paiol"}, {"id": "Maria_Angela-42_9976-5079-paio", "nome": "Maria Angela", "tel": "42 9976-5079", "tipo": "10", "pontos": 1, "historico": [{"data": "06/02/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Cat", "cadastro": "06/02/2026", "contato": "Paiol"}, {"id": "Márcio-49_99918-5509-rancho", "nome": "Márcio", "tel": "49 99918-5509", "tipo": "10", "pontos": 1, "historico": [{"data": "13/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Cat", "cadastro": "13/04/2026", "contato": "Rancho"}, {"id": "Franciele-42_99990-6905-rancho", "nome": "Franciele", "tel": "42 99990-6905", "tipo": "10", "pontos": 1, "historico": [{"data": "08/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Special Cat", "cadastro": "08/04/2026", "contato": "Rancho"}, {"id": "Gabriel-42_99818-9428-paiol", "nome": "Gabriel", "tel": "42 99818-9428", "tipo": "10", "pontos": 1, "historico": [{"data": "04/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Gato", "cadastro": "04/03/2026", "contato": "Paiol"}, {"id": "Beatriz-42_99108-4923-paiol", "nome": "Beatriz", "tel": "42 99108-4923", "tipo": "10", "pontos": 1, "historico": [{"data": "30/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Gato", "cadastro": "30/03/2026", "contato": "Paiol"}, {"id": "João_Paulo-42_99124-5683-paiol", "nome": "João Paulo", "tel": "42 99124-5683", "tipo": "10", "pontos": 1, "historico": [{"data": "31/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Gato", "cadastro": "31/03/2026", "contato": "Paiol"}, {"id": "Viviane-42_99977-3428-paiol", "nome": "Viviane", "tel": "42 99977-3428", "tipo": "10", "pontos": 1, "historico": [{"data": "06/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Gato", "cadastro": "06/04/2026", "contato": "Paiol"}, {"id": "Ana_Paula_Naldony-42_9947-9878", "nome": "Ana Paula Naldony", "tel": "42 9947-9878", "tipo": "10", "pontos": 1, "historico": [{"data": "23/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 15kg", "cadastro": "23/03/2026", "contato": "Paiol"}, {"id": "Siliane-42999702102-rancho", "nome": "Siliane", "tel": "42999702102", "tipo": "10", "pontos": 1, "historico": [{"data": "23/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 15kg", "cadastro": "23/03/2026", "contato": "Rancho"}, {"id": "Ton-41_9893-5899-paiol", "nome": "Ton", "tel": "41 9893-5899", "tipo": "10", "pontos": 2, "historico": [{"data": "13/01/2026", "tipo": "compra"}, {"data": "02/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 15kg", "cadastro": "13/01/2026", "contato": "Paiol"}, {"id": "Sérgio-42_9859-8795-paiol", "nome": "Sérgio", "tel": "42 9859-8795", "tipo": "10", "pontos": 2, "historico": [{"data": "30/01/2026", "tipo": "compra"}, {"data": "30/01/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 15kg", "cadastro": "30/01/2026", "contato": "Paiol"}, {"id": "Juliana-42_99911-1358-paiol", "nome": "Juliana", "tel": "42 99911-1358", "tipo": "10", "pontos": 3, "historico": [{"data": "20/03/2026", "tipo": "compra"}, {"data": "01/04/2026", "tipo": "compra"}, {"data": "08/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 15kg", "cadastro": "20/03/2026", "contato": "Paiol"}, {"id": "Rosana-42_99957-1136-paiol", "nome": "Rosana", "tel": "42 99957-1136", "tipo": "10", "pontos": 1, "historico": [{"data": "20/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 15kg", "cadastro": "20/03/2026", "contato": "Paiol"}, {"id": "Idalina-42_98428-8438-paiol", "nome": "Idalina", "tel": "42 98428-8438", "tipo": "10", "pontos": 1, "historico": [{"data": "24/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 15kg", "cadastro": "24/03/2026", "contato": "Paiol"}, {"id": "Sônia-42_99824-0580-paiol", "nome": "Sônia", "tel": "42 99824-0580", "tipo": "10", "pontos": 1, "historico": [{"data": "01/12/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 15kg", "cadastro": "01/12/2026", "contato": "Paiol"}, {"id": "Hans-42_9974-7731-paiol", "nome": "Hans", "tel": "42 9974-7731", "tipo": "10", "pontos": 1, "historico": [{"data": "15/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 15kg", "cadastro": "15/03/2026", "contato": "Paiol"}, {"id": "Dona_Ângela-42_9944-6166-paiol", "nome": "Dona Ângela", "tel": "42 9944-6166", "tipo": "10", "pontos": 1, "historico": [{"data": "10/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 15kg", "cadastro": "10/03/2026", "contato": "Paiol"}, {"id": "Madalena-42_9833-5628-rancho", "nome": "Madalena", "tel": "42 9833-5628", "tipo": "10", "pontos": 2, "historico": [{"data": "07/03/2026", "tipo": "compra"}, {"data": "11/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 15kg", "cadastro": "07/03/2026", "contato": "Rancho"}, {"id": "Jefferson-42_9981-8949-rancho", "nome": "Jefferson", "tel": "42 9981-8949", "tipo": "10", "pontos": 2, "historico": [{"data": "18/02/2026", "tipo": "compra"}, {"data": "27/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 15kg", "cadastro": "18/02/2026", "contato": "Rancho"}, {"id": "Roseli-42_99821-2188-paiol", "nome": "Roseli", "tel": "42 99821-2188", "tipo": "10", "pontos": 1, "historico": [{"data": "30/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 15kg", "cadastro": "30/03/2026", "contato": "Paiol"}, {"id": "Fernando-42_99906-8760-paiol", "nome": "Fernando", "tel": "42 99906-8760", "tipo": "10", "pontos": 1, "historico": [{"data": "30/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 15kg", "cadastro": "30/03/2026", "contato": "Paiol"}, {"id": "Luiz-42_99991-1744-paiol", "nome": "Luiz", "tel": "42 99991-1744", "tipo": "10", "pontos": 1, "historico": [{"data": "09/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 15kg", "cadastro": "09/04/2026", "contato": "Paiol"}, {"id": "Itamar-42_99827-2020-rancho", "nome": "Itamar", "tel": "42 99827-2020", "tipo": "10", "pontos": 1, "historico": [{"data": "23/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 15kg", "cadastro": "23/04/2026", "contato": "Rancho"}, {"id": "Estefani-42_99840-3087-rancho", "nome": "Estefani", "tel": "42 99840-3087", "tipo": "10", "pontos": 1, "historico": [{"data": "28/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 20kg", "cadastro": "28/03/2026", "contato": "Rancho"}, {"id": "Lucas-42_99812-7598-rancho", "nome": "Lucas", "tel": "42 99812-7598", "tipo": "10", "pontos": 1, "historico": [{"data": "11/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 20kg", "cadastro": "11/04/2026", "contato": "Rancho"}, {"id": "Lilian-42_99993-0285-paiol", "nome": "Lilian", "tel": "42 99993-0285", "tipo": "10", "pontos": 1, "historico": [{"data": "10/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 20kg", "cadastro": "10/04/2026", "contato": "Paiol"}, {"id": "Aniele-42_99949-9244-paiol", "nome": "Aniele", "tel": "42 99949-9244", "tipo": "10", "pontos": 1, "historico": [{"data": "10/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Carne 20kg", "cadastro": "10/04/2026", "contato": "Paiol"}, {"id": "Luiz_Eduardo-42_98878-6474-pai", "nome": "Luiz Eduardo", "tel": "42 98878-6474", "tipo": "10", "pontos": 3, "historico": [{"data": "30/03/2026", "tipo": "compra"}, {"data": "14/04/2026", "tipo": "compra"}, {"data": "14/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna PP", "cadastro": "30/03/2026", "contato": "Paiol"}, {"id": "Davi-42_98414-4757-paiol", "nome": "Davi", "tel": "42 98414-4757", "tipo": "10", "pontos": 1, "historico": [{"data": "06/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna PP", "cadastro": "06/04/2026", "contato": "Paiol"}, {"id": "Patrick-42_99863-7411-paiol", "nome": "Patrick", "tel": "42 99863-7411", "tipo": "10", "pontos": 1, "historico": [{"data": "12/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna PP", "cadastro": "12/04/2026", "contato": "Paiol"}, {"id": "Dani-42_98434-7147-rancho", "nome": "Dani", "tel": "42 98434-7147", "tipo": "10", "pontos": 1, "historico": [{"data": "10/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna PP", "cadastro": "10/04/2026", "contato": "Rancho"}, {"id": "Ana-42_99921-2885-paiol", "nome": "Ana", "tel": "42 99921-2885", "tipo": "10", "pontos": 1, "historico": [{"data": "09/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna PP", "cadastro": "09/04/2026", "contato": "Paiol"}, {"id": "Ariane-42_98404-1048-paiol", "nome": "Ariane", "tel": "42 98404-1048", "tipo": "10", "pontos": 1, "historico": [{"data": "02/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Unna Filhote", "cadastro": "02/03/2026", "contato": "Paiol"}, {"id": "Ederson-42_98409-9186-paiol", "nome": "Ederson", "tel": "42 98409-9186", "tipo": "10", "pontos": 1, "historico": [{"data": "27/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Quidog 7kg", "cadastro": "27/03/2026", "contato": "Paiol"}, {"id": "Zeno-48_98429-8508-paiol", "nome": "Zeno", "tel": "48 98429-8508", "tipo": "10", "pontos": 1, "historico": [{"data": "11/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Quidog 7kg", "cadastro": "11/04/2026", "contato": "Paiol"}, {"id": "Lucas-42_99158-3021-paiol", "nome": "Lucas", "tel": "42 99158-3021", "tipo": "10", "pontos": 3, "historico": [{"data": "22/03/2026", "tipo": "compra"}, {"data": "06/04/2026", "tipo": "compra"}, {"data": "22/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Quidog 15kg", "cadastro": "22/03/2026", "contato": "Paiol"}, {"id": "Mainara-42_98421-6088-paiol", "nome": "Mainara", "tel": "42 98421-6088", "tipo": "10", "pontos": 2, "historico": [{"data": "17/02/2026", "tipo": "compra"}, {"data": "02/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Quidog 15kg", "cadastro": "17/02/2026", "contato": "Paiol"}, {"id": "Marilza-42_98402-3751-paiol", "nome": "Marilza", "tel": "42 98402-3751", "tipo": "10", "pontos": 1, "historico": [{"data": "02/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Quidog 15kg", "cadastro": "02/04/2026", "contato": "Paiol"}, {"id": "Cerli-42_92000-8708-paiol", "nome": "Cerli", "tel": "42 92000-8708", "tipo": "10", "pontos": 1, "historico": [{"data": "14/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Quidog 15kg", "cadastro": "14/04/2026", "contato": "Paiol"}, {"id": "Débora-42_99995-0560-paiol", "nome": "Débora", "tel": "42 99995-0560", "tipo": "10", "pontos": 1, "historico": [{"data": "12/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Quidog 15kg", "cadastro": "12/04/2026", "contato": "Paiol"}, {"id": "Adriel-42_99992-9494-paiol", "nome": "Adriel", "tel": "42 99992-9494", "tipo": "10", "pontos": 1, "historico": [{"data": "11/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Quidog 15kg", "cadastro": "11/04/2026", "contato": "Paiol"}, {"id": "Paulo-42_98817-1170-paiol", "nome": "Paulo", "tel": "42 98817-1170", "tipo": "10", "pontos": 1, "historico": [{"data": "11/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Quidog 15kg", "cadastro": "11/04/2026", "contato": "Paiol"}, {"id": "João_Túlio-42_99839-2457-paiol", "nome": "João Túlio", "tel": "42 99839-2457", "tipo": "10", "pontos": 1, "historico": [{"data": "11/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Quidog 15kg", "cadastro": "11/04/2026", "contato": "Paiol"}, {"id": "Elizeu-41_99943-7143-rancho", "nome": "Elizeu", "tel": "41 99943-7143", "tipo": "10", "pontos": 1, "historico": [{"data": "06/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Quidog 15kg", "cadastro": "06/04/2026", "contato": "Rancho"}, {"id": "Paulo-42_99841-9799-rancho", "nome": "Paulo", "tel": "42 99841-9799", "tipo": "10", "pontos": 1, "historico": [{"data": "17/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Quidog 15kg", "cadastro": "17/04/2026", "contato": "Rancho"}, {"id": "Luciana-42_99807-4005-paiol", "nome": "Luciana", "tel": "42 99807-4005", "tipo": "10", "pontos": 1, "historico": [{"data": "22/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Quidog 20kg", "cadastro": "22/03/2026", "contato": "Paiol"}, {"id": "Ivone-42_99937-1912-paiol", "nome": "Ivone", "tel": "42 99937-1912", "tipo": "10", "pontos": 2, "historico": [{"data": "26/01/2026", "tipo": "compra"}, {"data": "02/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Quidog 20kg", "cadastro": "26/01/2026", "contato": "Paiol"}, {"id": "Marcos-42_98424-1029-paiol", "nome": "Marcos", "tel": "42 98424-1029", "tipo": "10", "pontos": 1, "historico": [{"data": "02/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Quidog 20kg", "cadastro": "02/04/2026", "contato": "Paiol"}, {"id": "Rodrigo-42_99811-9220-paiol", "nome": "Rodrigo", "tel": "42 99811-9220", "tipo": "10", "pontos": 1, "historico": [{"data": "02/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "SD Gold", "cadastro": "02/04/2026", "contato": "Paiol"}, {"id": "Paola_Vendler-42_99138-6694-pa", "nome": "Paola Vendler", "tel": "42 99138-6694", "tipo": "10", "pontos": 1, "historico": [{"data": "21/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "SuperDog 25kg", "cadastro": "21/03/2026", "contato": "Paiol"}, {"id": "Fran-42_99974-3088-paiol", "nome": "Fran", "tel": "42 99974-3088", "tipo": "10", "pontos": 1, "historico": [{"data": "18/02/2026", "tipo": "compra"}], "resgates": 0, "racao": "SuperDog 25kg", "cadastro": "18/02/2026", "contato": "Paiol"}, {"id": "Erivelton_-_TS_Móveis-42_99858", "nome": "Erivelton - TS Móveis", "tel": "42 99858-6900", "tipo": "10", "pontos": 1, "historico": [{"data": "31/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "SuperDog 25kg", "cadastro": "31/03/2026", "contato": "Paiol"}, {"id": "Douglas-42_99832-6424-paiol", "nome": "Douglas", "tel": "42 99832-6424", "tipo": "10", "pontos": 1, "historico": [{"data": "10/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "SuperDog 25kg", "cadastro": "10/04/2026", "contato": "Paiol"}, {"id": "André-42_99875-1443-paiol", "nome": "André", "tel": "42 99875-1443", "tipo": "10", "pontos": 1, "historico": [{"data": "05/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "SuperDog 25kg", "cadastro": "05/04/2026", "contato": "Paiol"}, {"id": "Meri-42_99903-9612-paiol", "nome": "Meri", "tel": "42 99903-9612", "tipo": "10", "pontos": 1, "historico": [{"data": "10/12/2026", "tipo": "compra"}], "resgates": 0, "racao": "SuperDog 15kg", "cadastro": "10/12/2026", "contato": "Paiol"}, {"id": "Michele-42_99976-9515-paiol", "nome": "Michele", "tel": "42 99976-9515", "tipo": "10", "pontos": 3, "historico": [{"data": "26/03/2026", "tipo": "compra"}, {"data": "04/04/2026", "tipo": "compra"}, {"data": "21/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "SuperDog 15kg", "cadastro": "26/03/2026", "contato": "Paiol"}, {"id": "José_Carlos-42_98864-4300-paio", "nome": "José Carlos", "tel": "42 98864-4300", "tipo": "10", "pontos": 1, "historico": [{"data": "27/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "SuperDog 15kg", "cadastro": "27/03/2026", "contato": "Paiol"}, {"id": "Júnior-42_99978-5682-paiol", "nome": "Júnior", "tel": "42 99978-5682", "tipo": "10", "pontos": 2, "historico": [{"data": "31/03/2026", "tipo": "compra"}, {"data": "18/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "SuperDog 15kg", "cadastro": "31/03/2026", "contato": "Paiol"}, {"id": "Willian-42_99813-5258-paiol", "nome": "Willian", "tel": "42 99813-5258", "tipo": "10", "pontos": 1, "historico": [{"data": "02/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "SuperDog 15kg", "cadastro": "02/04/2026", "contato": "Paiol"}, {"id": "João_Calinoski-42_98428-6213-p", "nome": "João Calinoski", "tel": "42 98428-6213", "tipo": "10", "pontos": 1, "historico": [{"data": "18/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "SuperDog 15kg", "cadastro": "18/04/2026", "contato": "Paiol"}, {"id": "Marisa-42_99836-6123-paiol", "nome": "Marisa", "tel": "42 99836-6123", "tipo": "10", "pontos": 1, "historico": [{"data": "15/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "SuperDog 15kg", "cadastro": "15/04/2026", "contato": "Paiol"}, {"id": "Andriele-42_99971-6365-paiol", "nome": "Andriele", "tel": "42 99971-6365", "tipo": "10", "pontos": 1, "historico": [{"data": "30/12/2026", "tipo": "compra"}], "resgates": 0, "racao": "Nutrive Power", "cadastro": "30/12/2026", "contato": "Paiol"}, {"id": "Ana_Academia-42_99165-3057-pai", "nome": "Ana Academia", "tel": "42 99165-3057", "tipo": "10", "pontos": 1, "historico": [{"data": "10/02/2026", "tipo": "compra"}], "resgates": 0, "racao": "Nutrive Power", "cadastro": "10/02/2026", "contato": "Paiol"}, {"id": "Gustavo-42_9824-1247-paiol", "nome": "Gustavo", "tel": "42 9824-1247", "tipo": "10", "pontos": 1, "historico": [{"data": "13/01/2026", "tipo": "compra"}], "resgates": 0, "racao": "Nutrive Power", "cadastro": "13/01/2026", "contato": "Paiol"}, {"id": "Jean_Machado_-_F-42_98869-5607", "nome": "Jean Machado - F", "tel": "42 98869-5607", "tipo": "10", "pontos": 1, "historico": [{"data": "24/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Nutrive Power", "cadastro": "24/03/2026", "contato": "Rancho"}, {"id": "Fabiano-42_98888-5746-paiol", "nome": "Fabiano", "tel": "42 98888-5746", "tipo": "10", "pontos": 1, "historico": [{"data": "23/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Nutrive Power", "cadastro": "23/03/2026", "contato": "Paiol"}, {"id": "Motta_-_F-42_99996-3811-paiol", "nome": "Motta - F", "tel": "42 99996-3811", "tipo": "10", "pontos": 1, "historico": [{"data": "20/01/2026", "tipo": "compra"}], "resgates": 0, "racao": "Nutrive Power", "cadastro": "20/01/2026", "contato": "Paiol"}, {"id": "Leonan_-_20kg-42_99808-3791-pa", "nome": "Leonan - 20kg", "tel": "42 99808-3791", "tipo": "10", "pontos": 1, "historico": [{"data": "31/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Nutrive Power", "cadastro": "31/03/2026", "contato": "Paiol"}, {"id": "Dener-42_9990-9307-rancho", "nome": "Dener", "tel": "42 9990-9307", "tipo": "10", "pontos": 1, "historico": [{"data": "02/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Nutrive Power", "cadastro": "02/04/2026", "contato": "Rancho"}, {"id": "Eduardo-42_98412-4034-paiol", "nome": "Eduardo", "tel": "42 98412-4034", "tipo": "10", "pontos": 1, "historico": [{"data": "02/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Nutrive Power", "cadastro": "02/04/2026", "contato": "Paiol"}, {"id": "Felipe_Nadal-42_99934-7122-pai", "nome": "Felipe Nadal", "tel": "42 99934-7122", "tipo": "10", "pontos": 1, "historico": [{"data": "12/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Nutrive Power", "cadastro": "12/04/2026", "contato": "Paiol"}, {"id": "Luizão_Arquiteto_-_Vermelha-Se", "nome": "Luizão Arquiteto - Vermelha", "tel": "Sem telefone", "tipo": "10", "pontos": 3, "historico": [{"data": "25/03/2026", "tipo": "compra"}, {"data": "07/04/2026", "tipo": "compra"}, {"data": "24/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Nutrives", "cadastro": "25/03/2026", "contato": "Paiol"}, {"id": "Felipe_Dancoski_-_Vermelha-42_", "nome": "Felipe Dancoski - Vermelha", "tel": "42 9909-4528", "tipo": "10", "pontos": 2, "historico": [{"data": "26/03/2026", "tipo": "compra"}, {"data": "24/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Nutrives", "cadastro": "26/03/2026", "contato": "Paiol"}, {"id": "Luiza_Saad_-_Vermelha-41_99962", "nome": "Luiza Saad - Vermelha", "tel": "41 99962-4892", "tipo": "10", "pontos": 1, "historico": [{"data": "12/02/2026", "tipo": "compra"}], "resgates": 0, "racao": "Nutrives", "cadastro": "12/02/2026", "contato": "Paiol"}, {"id": "Rubia_-_Amarela-42_99907-9485-", "nome": "Rubia - Amarela", "tel": "42 99907-9485", "tipo": "10", "pontos": 1, "historico": [{"data": "14/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Nutrives", "cadastro": "14/04/2026", "contato": "Rancho"}, {"id": "Murilo_Oliveira-42_9109-9922-p", "nome": "Murilo Oliveira", "tel": "42 9109-9922", "tipo": "10", "pontos": 3, "historico": [{"data": "05/01/2026", "tipo": "compra"}, {"data": "19/02/2026", "tipo": "compra"}, {"data": "04/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Performa 15kg", "cadastro": "05/01/2026", "contato": "Paiol"}, {"id": "Edinaldo-42_99986-3948-paiol", "nome": "Edinaldo", "tel": "42 99986-3948", "tipo": "10", "pontos": 3, "historico": [{"data": "03/03/2026", "tipo": "compra"}, {"data": "29/03/2026", "tipo": "compra"}, {"data": "25/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Performa 15kg", "cadastro": "03/03/2026", "contato": "Paiol"}, {"id": "Dayane-42_8409-6093-paiol", "nome": "Dayane", "tel": "42 8409-6093", "tipo": "10", "pontos": 1, "historico": [{"data": "02/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Performa 15kg", "cadastro": "02/03/2026", "contato": "Paiol"}, {"id": "Débora-42_99810-3997-paiol", "nome": "Débora", "tel": "42 99810-3997", "tipo": "10", "pontos": 1, "historico": [{"data": "05/02/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "05/02/2026", "contato": "Paiol"}, {"id": "Vitor-42_9954-0311-rancho", "nome": "Vitor", "tel": "42 9954-0311", "tipo": "10", "pontos": 2, "historico": [{"data": "09/03/2026", "tipo": "compra"}, {"data": "06/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "09/03/2026", "contato": "Rancho"}, {"id": "Jane-42_9995-2759-rancho", "nome": "Jane", "tel": "42 9995-2759", "tipo": "10", "pontos": 2, "historico": [{"data": "21/03/2026", "tipo": "compra"}, {"data": "03/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "21/03/2026", "contato": "Rancho"}, {"id": "Everton-42_98889-3400-rancho", "nome": "Everton", "tel": "42 98889-3400", "tipo": "10", "pontos": 2, "historico": [{"data": "31/03/2026", "tipo": "compra"}, {"data": "24/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "31/03/2026", "contato": "Rancho"}, {"id": "Crisciely-42_9106-8297-rancho", "nome": "Crisciely", "tel": "42 9106-8297", "tipo": "10", "pontos": 1, "historico": [{"data": "08/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "08/04/2026", "contato": "Rancho"}, {"id": "Sérgio-42_99862-3147-paiol", "nome": "Sérgio", "tel": "42 99862-3147", "tipo": "10", "pontos": 1, "historico": [{"data": "26/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "26/03/2026", "contato": "Paiol"}, {"id": "Claudete-42_98834-5693-rancho", "nome": "Claudete", "tel": "42 98834-5693", "tipo": "10", "pontos": 1, "historico": [{"data": "30/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "30/03/2026", "contato": "Rancho"}, {"id": "Marcos_-_RP-42_98869-7268-ranc", "nome": "Marcos - RP", "tel": "42 98869-7268", "tipo": "10", "pontos": 1, "historico": [{"data": "31/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "31/03/2026", "contato": "Rancho"}, {"id": "Ricardo-42_99810-5374-rancho", "nome": "Ricardo", "tel": "42 99810-5374", "tipo": "10", "pontos": 1, "historico": [{"data": "31/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "31/03/2026", "contato": "Rancho"}, {"id": "Rose-42_99927-1309-paiol", "nome": "Rose", "tel": "42 99927-1309", "tipo": "10", "pontos": 1, "historico": [{"data": "04/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "04/04/2026", "contato": "Paiol"}, {"id": "Wellinton-42_99818-9494-rancho", "nome": "Wellinton", "tel": "42 99818-9494", "tipo": "10", "pontos": 1, "historico": [{"data": "11/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "11/04/2026", "contato": "Rancho"}, {"id": "Márcio-42_99969-0477-rancho", "nome": "Márcio", "tel": "42 99969-0477", "tipo": "10", "pontos": 1, "historico": [{"data": "09/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "09/04/2026", "contato": "Rancho"}, {"id": "Amanda-42_99828-7737-rancho", "nome": "Amanda", "tel": "42 99828-7737", "tipo": "10", "pontos": 1, "historico": [{"data": "08/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "08/04/2026", "contato": "Rancho"}, {"id": "Adir-42_99964-6528-rancho", "nome": "Adir", "tel": "42 99964-6528", "tipo": "10", "pontos": 1, "historico": [{"data": "08/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "08/04/2026", "contato": "Rancho"}, {"id": "Edcarlos-42_99903-1322-rancho", "nome": "Edcarlos", "tel": "42 99903-1322", "tipo": "10", "pontos": 1, "historico": [{"data": "07/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "07/04/2026", "contato": "Rancho"}, {"id": "Marcelo-42_99935-2227-rancho", "nome": "Marcelo", "tel": "42 99935-2227", "tipo": "10", "pontos": 1, "historico": [{"data": "14/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "14/04/2026", "contato": "Rancho"}, {"id": "Samera-42_99905-3610-rancho", "nome": "Samera", "tel": "42 99905-3610", "tipo": "10", "pontos": 1, "historico": [{"data": "22/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "22/04/2026", "contato": "Rancho"}, {"id": "Lucinei-42_98444-5524-rancho", "nome": "Lucinei", "tel": "42 98444-5524", "tipo": "10", "pontos": 1, "historico": [{"data": "20/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "20/04/2026", "contato": "Rancho"}, {"id": "Mário_Cesar-42_99926-2454-paio", "nome": "Mário Cesar", "tel": "42 99926-2454", "tipo": "10", "pontos": 1, "historico": [{"data": "15/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Billy Dog", "cadastro": "15/04/2026", "contato": "Paiol"}, {"id": "Si_França-42_99903-5149-paiol", "nome": "Si França", "tel": "42 99903-5149", "tipo": "10", "pontos": 2, "historico": [{"data": "12/03/2026", "tipo": "compra"}, {"data": "11/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "12/03/2026", "contato": "Paiol"}, {"id": "Reni-42_98888-7290-rancho", "nome": "Reni", "tel": "42 98888-7290", "tipo": "10", "pontos": 1, "historico": [{"data": "26/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "26/03/2026", "contato": "Rancho"}, {"id": "Erick-42_9842-3926-paiol", "nome": "Erick", "tel": "42 9842-3926", "tipo": "10", "pontos": 2, "historico": [{"data": "25/03/2026", "tipo": "compra"}, {"data": "11/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "25/03/2026", "contato": "Paiol"}, {"id": "Murilo-42_99864-7979-rancho", "nome": "Murilo", "tel": "42 99864-7979", "tipo": "10", "pontos": 1, "historico": [{"data": "26/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "26/03/2026", "contato": "Rancho"}, {"id": "Vanderlei_-_Barba-42_99917-659", "nome": "Vanderlei - Barba", "tel": "42 99917-6590", "tipo": "10", "pontos": 4, "historico": [{"data": "27/03/2026", "tipo": "compra"}, {"data": "13/04/2026", "tipo": "compra"}, {"data": "13/04/2026", "tipo": "compra"}, {"data": "22/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "27/03/2026", "contato": "Paiol"}, {"id": "Thais-42_9910-0805-paiol", "nome": "Thais", "tel": "42 9910-0805", "tipo": "10", "pontos": 1, "historico": [{"data": "27/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "27/03/2026", "contato": "Paiol"}, {"id": "Isaac-42_99828-7864-rancho", "nome": "Isaac", "tel": "42 99828-7864", "tipo": "10", "pontos": 3, "historico": [{"data": "27/03/2026", "tipo": "compra"}, {"data": "27/03/2026", "tipo": "compra"}, {"data": "27/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "27/03/2026", "contato": "Rancho"}, {"id": "Gislene-42_99967-8271-rancho", "nome": "Gislene", "tel": "42 99967-8271", "tipo": "10", "pontos": 1, "historico": [{"data": "06/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "06/04/2026", "contato": "Rancho"}, {"id": "Marcelo-42_99819-8527-paiol", "nome": "Marcelo", "tel": "42 99819-8527", "tipo": "10", "pontos": 1, "historico": [{"data": "14/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "14/04/2026", "contato": "Paiol"}, {"id": "Cirineu-42_99871-6680-paiol", "nome": "Cirineu", "tel": "42 99871-6680", "tipo": "10", "pontos": 1, "historico": [{"data": "13/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "13/04/2026", "contato": "Paiol"}, {"id": "Nicolas-42_99989-4170-paiol", "nome": "Nicolas", "tel": "42 99989-4170", "tipo": "10", "pontos": 1, "historico": [{"data": "07/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "07/04/2026", "contato": "Paiol"}, {"id": "Caroline-42_99911-7496-rancho", "nome": "Caroline", "tel": "42 99911-7496", "tipo": "10", "pontos": 1, "historico": [{"data": "06/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "06/04/2026", "contato": "Rancho"}, {"id": "Jane-42_99940-1797-paiol", "nome": "Jane", "tel": "42 99940-1797", "tipo": "10", "pontos": 1, "historico": [{"data": "04/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "04/04/2026", "contato": "Paiol"}, {"id": "Gabriele-42_98435-9214-paiol", "nome": "Gabriele", "tel": "42 98435-9214", "tipo": "10", "pontos": 1, "historico": [{"data": "21/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "21/04/2026", "contato": "Paiol"}, {"id": "Fábio-42_98401-0167-rancho", "nome": "Fábio", "tel": "42 98401-0167", "tipo": "10", "pontos": 1, "historico": [{"data": "24/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "24/04/2026", "contato": "Rancho"}, {"id": "Ricardo-42_99988-9559-paiol", "nome": "Ricardo", "tel": "42 99988-9559", "tipo": "10", "pontos": 2, "historico": [{"data": "24/04/2026", "tipo": "compra"}, {"data": "24/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "24/04/2026", "contato": "Paiol"}, {"id": "Thabata-42_98869-6117-paiol", "nome": "Thabata", "tel": "42 98869-6117", "tipo": "10", "pontos": 1, "historico": [{"data": "23/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "23/04/2026", "contato": "Paiol"}, {"id": "Cristina-42_99833-7487-paiol", "nome": "Cristina", "tel": "42 99833-7487", "tipo": "10", "pontos": 1, "historico": [{"data": "18/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "18/04/2026", "contato": "Paiol"}, {"id": "Janaina-42_98427-8758-rancho", "nome": "Janaina", "tel": "42 98427-8758", "tipo": "10", "pontos": 1, "historico": [{"data": "16/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "16/04/2026", "contato": "Rancho"}, {"id": "Silvano-41_99932-6516-paiol", "nome": "Silvano", "tel": "41 99932-6516", "tipo": "10", "pontos": 1, "historico": [{"data": "16/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "16/04/2026", "contato": "Paiol"}, {"id": "Rosângela-42_99901-2241-paiol", "nome": "Rosângela", "tel": "42 99901-2241", "tipo": "10", "pontos": 1, "historico": [{"data": "15/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Chacco", "cadastro": "15/04/2026", "contato": "Paiol"}, {"id": "Ka_Cliente-42_99827-3202-paiol", "nome": "Ka Cliente", "tel": "42 99827-3202", "tipo": "10", "pontos": 2, "historico": [{"data": "09/03/2026", "tipo": "compra"}, {"data": "02/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Rango", "cadastro": "09/03/2026", "contato": "Paiol"}, {"id": "Milaine-42_99144-5680-paiol", "nome": "Milaine", "tel": "42 99144-5680", "tipo": "10", "pontos": 1, "historico": [{"data": "27/02/2026", "tipo": "compra"}], "resgates": 0, "racao": "Rango", "cadastro": "27/02/2026", "contato": "Paiol"}, {"id": "Cristiano-42_99137-5362-paiol", "nome": "Cristiano", "tel": "42 99137-5362", "tipo": "10", "pontos": 1, "historico": [{"data": "01/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Rango", "cadastro": "01/03/2026", "contato": "Paiol"}, {"id": "Francisca-42_98422-2964-rancho", "nome": "Francisca", "tel": "42 98422-2964", "tipo": "10", "pontos": 1, "historico": [{"data": "31/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Rango", "cadastro": "31/03/2026", "contato": "Rancho"}, {"id": "Tais-42_99991-0805-paiol", "nome": "Tais", "tel": "42 99991-0805", "tipo": "10", "pontos": 1, "historico": [{"data": "08/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Rango", "cadastro": "08/04/2026", "contato": "Paiol"}, {"id": "Ariel-42_99834-2634-rancho", "nome": "Ariel", "tel": "42 99834-2634", "tipo": "10", "pontos": 1, "historico": [{"data": "07/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Rango", "cadastro": "07/04/2026", "contato": "Rancho"}, {"id": "Adriana-42_98414-8863-paiol", "nome": "Adriana", "tel": "42 98414-8863", "tipo": "10", "pontos": 1, "historico": [{"data": "26/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Dog Choni", "cadastro": "26/03/2026", "contato": "Paiol"}, {"id": "Cat_Choni_-_Carina-9_3300-1367", "nome": "Cat Choni - Carina", "tel": "9 3300-1367", "tipo": "10", "pontos": 1, "historico": [{"data": "10/04/2026", "tipo": "compra"}], "resgates": 0, "racao": "Dog Choni", "cadastro": "10/04/2026", "contato": "Rancho"}, {"id": "Rhaian-42_9920-5548-rancho", "nome": "Rhaian", "tel": "42 9920-5548", "tipo": "10", "pontos": 1, "historico": [{"data": "13/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Ração de Cavalo", "cadastro": "13/03/2026", "contato": "Rancho"}, {"id": "Edino-42_9147-3185-rancho", "nome": "Edino", "tel": "42 9147-3185", "tipo": "10", "pontos": 0, "historico": [], "resgates": 0, "racao": "Ração de Cavalo", "cadastro": "01/01/2026", "contato": "Rancho"}, {"id": "Cesar-42_9954-6928-rancho", "nome": "Cesar", "tel": "42 9954-6928", "tipo": "10", "pontos": 1, "historico": [{"data": "13/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Ração de Cavalo", "cadastro": "13/03/2026", "contato": "Rancho"}, {"id": "Israel-42_98891-1346-rancho", "nome": "Israel", "tel": "42 98891-1346", "tipo": "10", "pontos": 1, "historico": [{"data": "24/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Ração de Cavalo", "cadastro": "24/03/2026", "contato": "Rancho"}, {"id": "Ricardo_Horst-42_9146-0481-ran", "nome": "Ricardo Horst", "tel": "42 9146-0481", "tipo": "10", "pontos": 1, "historico": [{"data": "07/03/2026", "tipo": "compra"}], "resgates": 0, "racao": "Ração de Cavalo", "cadastro": "07/03/2026", "contato": "Rancho"}];
-
-function badge(txt,cls){ const b=document.getElementById('sync-badge'); b.textContent=txt; b.className='sync-badge '+(cls||''); }
-function showMsg(el,txt,tipo){ el.textContent=txt; el.className='msg show msg-'+tipo; setTimeout(()=>el.classList.remove('show'),4000); }
-function gerarId(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,5); }
-function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
-
-// ── CARREGAR DO FIREBASE ────────────────────────────────
-async function carregarDoFirebase(){
-  const snap = await getDocs(col);
-  clientes = snap.docs.map(d=>({id:d.id,...d.data()}));
+function bdg(txt, cls) {
+  const b = document.getElementById('bdg');
+  b.textContent = txt;
+  b.className = 'badge ' + cls;
 }
 
-// ── INICIALIZAR ─────────────────────────────────────────
-async function init(){
+async function init() {
   try {
-    badge('⏳ Conectando...','syncing');
-    const auth = getAuth(fb);
+    bdg('Conectando...', 'wait');
     await signInAnonymously(auth);
-    badge('⏳ Verificando...','syncing');
-    await carregarDoFirebase();
-    // Import missing
-    const existentes = new Set(clientes.map(c=>c.id));
-    const faltantes = DADOS.filter(c=>!existentes.has(c.id));
-    if(faltantes.length){
-      const LOTE=40; let done=0;
-      for(let i=0;i<faltantes.length;i+=LOTE){
-        const b2=writeBatch(db);
-        faltantes.slice(i,i+LOTE).forEach(c=>b2.set(doc(db,'clientes',c.id),c));
-        await b2.commit();
-        done+=Math.min(LOTE,faltantes.length-i);
-        badge(`⏳ ${done}/${faltantes.length} importados...`,'syncing');
-        await sleep(200);
+    bdg('Carregando...', 'wait');
+    await sincronizar();
+    const ids = new Set(C.map(c => c.id));
+    const faltam = DADOS.filter(c => !ids.has(c.id));
+    if (faltam.length > 0) {
+      bdg('Importando ' + faltam.length + '...', 'wait');
+      const LOTE = 400;
+      for (let i = 0; i < faltam.length; i += LOTE) {
+        const bat = writeBatch(db);
+        faltam.slice(i, i + LOTE).forEach(c => bat.set(doc(db, 'clientes', c.id), c));
+        await bat.commit();
       }
-      await carregarDoFirebase();
+      await sincronizar();
     }
-    badge('🟢 Online','');
-    renderDashboard(); renderClientes();
-  } catch(e){ badge('🔴 '+e.message,'offline'); }
+    bdg('Online', 'ok');
+    renderPainel();
+    listarClientes();
+  } catch(e) {
+    bdg('Erro: ' + e.message, 'err');
+    console.error(e);
+  }
 }
 
-// ── SINCRONIZAR (botão manual) ──────────────────────────
-async function sincronizar(){
-  try {
-    badge('⏳ Sincronizando...','syncing');
-    await carregarDoFirebase();
-    badge('🟢 Online','');
-    renderDashboard(); renderClientes();
-  } catch(e){ badge('🔴 Erro','offline'); }
+async function sincronizar() {
+  const snap = await getDocs(col);
+  C = snap.docs.map(d => ({ id: d.id, ...d.data() }));
 }
 
-// ── NAVEGAÇÃO ───────────────────────────────────────────
-function showScreen(s){
-  document.querySelectorAll('.screen').forEach(e=>e.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(e=>e.classList.remove('active'));
-  document.getElementById('screen-'+s).classList.add('active');
-  ['dashboard','clientes','registrar','premios','crm'].forEach((n,i)=>{
-    if(n===s) document.querySelectorAll('.tab')[i].classList.add('active');
-  });
-  if(s==='dashboard') renderDashboard();
-  if(s==='clientes') renderClientes();
-  if(s==='crm') renderCRM();
-}
-function setFilter(f,el){ filterAtivo=f; currentPage=1; document.querySelectorAll('#screen-clientes .filter-btn').forEach(b=>b.classList.remove('active')); el.classList.add('active'); renderClientes(); }
-function setCrmFilter(f,el){ crmFilter=f; document.querySelectorAll('#screen-crm .filter-btn').forEach(b=>b.classList.remove('active')); el.classList.add('active'); renderCRM(); }
+function getC(id) { return C.find(x => x.id === id); }
+function getIdx(id) { return C.findIndex(x => x.id === id); }
 
-// ── RENDER ──────────────────────────────────────────────
-function getFiltered(){
-  const q=(document.getElementById('search-input')?.value||'').trim().toLowerCase();
-  return clientes.filter(c=>{
-    if(filterAtivo!=='todos'&&(c.contato||'')!==filterAtivo) return false;
-    if(q&&!c.nome.toLowerCase().includes(q)&&!c.tel.includes(q)&&!(c.racao||'').toLowerCase().includes(q)) return false;
-    return true;
-  });
+function ir(pag) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('pg-' + pag).classList.add('active');
+  const tabs = ['painel','clientes','registrar','premios','crm'];
+  const i = tabs.indexOf(pag);
+  if (i >= 0) document.querySelectorAll('.tab')[i].classList.add('active');
+  if (pag === 'painel') renderPainel();
+  if (pag === 'clientes') listarClientes();
+  if (pag === 'crm') renderCRM();
 }
 
-function clienteCard(c,modo){
-  const meta=parseInt(c.tipo||'10'), pct=Math.min(100,Math.round(c.pontos/meta*100)), pronto=c.pontos>=meta;
-  const hist=(c.historico||[]).slice(-2).reverse().map(h=>`<div class="history-item"><span>${h.tipo==='compra'?'+1 pacote':'🎁 Prêmio'}</span><span>${h.data}</span></div>`).join('');
-  let acoes='';
-  if(modo==='compra') acoes=`<button class="btn btn-success" onclick="registrarCompra('${c.id}')">+1 pacote</button>`;
-  else if(modo==='premio') acoes=pronto?`<button class="btn btn-success" onclick="resgatarPremio('${c.id}')">🎁 Resgatar</button>`:`<span style="font-size:13px;color:#aaa">Faltam ${meta-c.pontos}</span>`;
-  else acoes=`<button class="btn btn-success" onclick="registrarCompra('${c.id}')">+1</button>
-    <button class="btn" onclick="abrirWA('${c.id}')" style="font-size:12px;padding:6px 10px">📱 WA</button>
-    <button class="btn btn-danger" onclick="removerCliente('${c.id}')">🗑</button>`;
-  return `<div class="client-item">
-    <div class="client-header">
-      <div>
-        <div class="client-name">${c.nome}</div>
-        <div class="client-phone">${c.tel}</div>
-        <span class="tag tag-racao" onclick="editarRacao('${c.id}')">${c.racao||'+ ração'} ✏️</span>
-        <span class="tag tag-contato">📱 ${c.contato||'Paiol'}</span>
-      </div>
-      <span class="prize-badge ${pronto?'prize-ready':''}">${pronto?'🎁 PRÊMIO!':c.pontos+'/'+meta}</span>
+function filtrar(f, el) {
+  filtroAtivo = f; pgAtual = 1;
+  document.querySelectorAll('#filtros .btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  listarClientes();
+}
+
+function crmFiltrar(f, el) {
+  crmFiltroAtivo = f;
+  document.querySelectorAll('#crm-filtros .btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  renderCRM();
+}
+
+function kpi(l, v) {
+  return `<div class="kpi"><div class="kpi-l">${l}</div><div class="kpi-v">${v}</div></div>`;
+}
+
+function card(c, modo) {
+  const meta = parseInt(c.tipo || '10');
+  const pct = Math.min(100, Math.round(c.pontos / meta * 100));
+  const pronto = c.pontos >= meta;
+  const hist = (c.historico || []).slice(-2).reverse()
+    .map(h => `<div class="hi"><span>${h.tipo === 'compra' ? '+1 pacote' : 'Premio'}</span><span>${h.data}</span></div>`)
+    .join('');
+  let acoes = '';
+  if (modo === 'compra') {
+    acoes = `<button class="btn g" data-action="compra" data-id="${c.id}">+1 pacote</button>`;
+  } else if (modo === 'premio') {
+    acoes = pronto
+      ? `<button class="btn g" data-action="resgatar" data-id="${c.id}">Resgatar</button>`
+      : `<span style="font-size:12px;color:#aaa">Faltam ${meta - c.pontos}</span>`;
+  } else {
+    acoes = `<button class="btn g" data-action="compra" data-id="${c.id}">+1</button> `
+      + `<button class="btn" data-action="wa" data-id="${c.id}" style="font-size:12px;padding:5px 9px">WA</button> `
+      + `<button class="btn r" data-action="excluir" data-id="${c.id}">Lixo</button>`;
+  }
+  return `<div class="ci">
+    <div class="ch"><div>
+      <div class="cn">${c.nome}</div>
+      <div class="cp">${c.tel}</div>
+      <span class="tg rc" data-action="racao" data-id="${c.id}">${c.racao || '+ racao'} E</span>
+      <span class="tg ct">📱 ${c.contato || 'Paiol'}</span>
     </div>
-    <div class="bar-bg"><div class="bar-fill" style="width:${pct}%"></div></div>
-    ${hist?`<div style="margin-top:4px">${hist}</div>`:''}
-    <div class="actions-row">${acoes}</div>
+    <span class="pb${pronto ? ' prize' : ''}">${pronto ? 'PREMIO!' : c.pontos + '/' + meta}</span>
+    </div>
+    <div class="bar"><div class="barf" style="width:${pct}%"></div></div>
+    ${hist ? `<div style="margin-top:4px">${hist}</div>` : ''}
+    <div class="ar">${acoes}</div>
   </div>`;
 }
 
-function renderClientes(){
-  const lista=getFiltered(), pages=Math.max(1,Math.ceil(lista.length/PER_PAGE));
-  if(currentPage>pages) currentPage=pages;
-  const slice=lista.slice((currentPage-1)*PER_PAGE,currentPage*PER_PAGE);
-  document.getElementById('lista-clientes').innerHTML=slice.length?slice.map(c=>clienteCard(c,'lista')).join(''):`<div class="empty">Nenhum cliente.</div>`;
-  const pg=document.getElementById('pagination');
-  if(pages<=1){pg.innerHTML='';return;}
-  let h=`<span class="page-info">${lista.length} clientes</span>`;
-  if(currentPage>1) h+=`<button class="page-btn" onclick="currentPage--;renderClientes()">‹</button>`;
-  h+=`<button class="page-btn active">${currentPage}/${pages}</button>`;
-  if(currentPage<pages) h+=`<button class="page-btn" onclick="currentPage++;renderClientes()">›</button>`;
-  pg.innerHTML=h;
+// Single event delegation for all actions
+document.body.addEventListener('click', async function(e) {
+  const btn = e.target.closest('[data-action]');
+  if (!btn) return;
+  const action = btn.dataset.action;
+  const id = btn.dataset.id;
+  if (action === 'compra') await addCompra(id);
+  if (action === 'resgatar') await resgatar(id);
+  if (action === 'excluir') await excluir(id);
+  if (action === 'wa') waCliente(id);
+  if (action === 'racao') await editarRacao(id);
+  if (action === 'crmwa') abrirCRM(id);
+});
+
+function renderPainel() {
+  const cel = { Paiol: 0, Rancho: 0, Daniel: 0, Matheus: 0 };
+  C.forEach(c => { if (cel[c.contato] !== undefined) cel[c.contato]++; });
+  const prontos = C.filter(c => c.pontos >= parseInt(c.tipo || '10'));
+  document.getElementById('kpis').innerHTML =
+    kpi('Total', C.length) + kpi('Premios', prontos.length) +
+    kpi('Paiol', cel.Paiol) + kpi('Rancho', cel.Rancho) +
+    kpi('Daniel', cel.Daniel) + kpi('Matheus', cel.Matheus);
+  document.getElementById('ls-premios').innerHTML = prontos.length
+    ? prontos.map(c => card(c, 'lista')).join('') : '<div class="empty">Nenhum premio.</div>';
+  const quase = C.filter(c => { const m = parseInt(c.tipo || '10'); return c.pontos >= m - 2 && c.pontos < m; });
+  document.getElementById('ls-quase').innerHTML = quase.length
+    ? quase.map(c => card(c, 'lista')).join('') : '<div class="empty">Ninguem proximo.</div>';
 }
 
-function renderDashboard(){
-  const total=clientes.length, prontos=clientes.filter(c=>c.pontos>=parseInt(c.tipo||'10')).length;
-  const cel={Paiol:0,Rancho:0,Daniel:0,Matheus:0};
-  clientes.forEach(c=>{if(cel[c.contato]!==undefined)cel[c.contato]++;});
-  document.getElementById('metrics').innerHTML=`
-    <div class="metric"><div class="metric-label">Total</div><div class="metric-value">${total}</div></div>
-    <div class="metric"><div class="metric-label">Prêmios 🎁</div><div class="metric-value">${prontos}</div></div>
-    <div class="metric"><div class="metric-label">Paiol</div><div class="metric-value">${cel.Paiol}</div></div>
-    <div class="metric"><div class="metric-label">Rancho</div><div class="metric-value">${cel.Rancho}</div></div>
-    <div class="metric"><div class="metric-label">Daniel</div><div class="metric-value">${cel.Daniel}</div></div>
-    <div class="metric"><div class="metric-label">Matheus</div><div class="metric-value">${cel.Matheus}</div></div>`;
-  document.getElementById('premios-disponiveis').innerHTML=clientes.filter(c=>c.pontos>=parseInt(c.tipo||'10')).map(c=>clienteCard(c,'lista')).join('')||`<div class="empty">Nenhum.</div>`;
-  const quase=clientes.filter(c=>{const m=parseInt(c.tipo||'10');return c.pontos>=m-2&&c.pontos<m;});
-  document.getElementById('quase-la').innerHTML=quase.map(c=>clienteCard(c,'lista')).join('')||`<div class="empty">Ninguém.</div>`;
-}
-
-// ── AÇÕES ───────────────────────────────────────────────
-async function cadastrarCliente(){
-  const nome=document.getElementById('reg-nome').value.trim();
-  const tel=document.getElementById('reg-tel').value.trim();
-  const msg=document.getElementById('msg-cadastro');
-  if(!nome||!tel){showMsg(msg,'Preencha nome e WhatsApp.','info');return;}
-  const novo={id:gerarId(),nome,tel,
-    contato:document.getElementById('reg-contato').value,
-    racao:document.getElementById('reg-racao').value.trim(),
-    tipo:document.getElementById('reg-tipo').value,
-    pontos:0,historico:[],resgates:0,
-    cadastro:new Date().toLocaleDateString('pt-BR')};
-  await setDoc(doc(db,'clientes',novo.id),novo);
-  clientes.push(novo); // update local array
-  renderDashboard(); renderClientes();
-  showMsg(msg,`${nome} cadastrado!`,'success');
-  document.getElementById('reg-nome').value='';
-  document.getElementById('reg-tel').value='';
-  document.getElementById('reg-racao').value='';
-  gerarWA(novo,'cadastro');
-}
-
-async function registrarCompra(id){
-  const idx=clientes.findIndex(x=>x.id===id); if(idx<0) return;
-  const c=clientes[idx], meta=parseInt(c.tipo||'10');
-  const di=document.getElementById('comp-data').value;
-  const dataFmt=di?di.split('-').reverse().join('/'):new Date().toLocaleDateString('pt-BR');
-  const qtd=Math.max(1,Math.min(20,parseInt(document.getElementById('comp-qtd').value)||1));
-  const upd={...c,historico:[...(c.historico||[])]};
-  let n=0;
-  for(let i=0;i<qtd;i++){
-    if(upd.pontos>=meta){if(i===0){alert('Prêmio pendente! Resgate primeiro.');return;}break;}
-    upd.pontos++; upd.historico.push({data:dataFmt,tipo:'compra'}); n++;
+function listarClientes() {
+  const q = (document.getElementById('busca')?.value || '').trim().toLowerCase();
+  const lista = C.filter(c => {
+    if (filtroAtivo !== 'todos' && (c.contato || '') !== filtroAtivo) return false;
+    if (q && !c.nome.toLowerCase().includes(q) && !c.tel.includes(q) && !(c.racao || '').toLowerCase().includes(q)) return false;
+    return true;
+  });
+  const pags = Math.max(1, Math.ceil(lista.length / POR_PAG));
+  if (pgAtual > pags) pgAtual = pags;
+  const slice = lista.slice((pgAtual - 1) * POR_PAG, pgAtual * POR_PAG);
+  document.getElementById('ls-clientes').innerHTML = slice.length
+    ? slice.map(c => card(c, 'lista')).join('') : '<div class="empty">Nenhum cliente.</div>';
+  let pg = '';
+  if (pags > 1) {
+    pg = `<span style="font-size:12px;color:#888">${lista.length} clientes</span>`;
+    if (pgAtual > 1) pg += ` <button class="btn" onclick="pgAtual--;listarClientes()">Anterior</button>`;
+    pg += ` <button class="btn active">${pgAtual}/${pags}</button>`;
+    if (pgAtual < pags) pg += ` <button class="btn" onclick="pgAtual++;listarClientes()">Proximo</button>`;
   }
-  await setDoc(doc(db,'clientes',id),upd);
-  clientes[idx]=upd; // update local array
-  buscarClienteCompra(); renderDashboard();
-  showMsg(document.getElementById('msg-compra'),`+${n} pacote${n>1?'s':''} para ${c.nome}. Saldo: ${upd.pontos}/${meta}`,'success');
-  gerarWA(upd,'compra');
+  document.getElementById('paginacao').innerHTML = pg;
 }
 
-async function resgatarPremio(id){
-  const idx=clientes.findIndex(x=>x.id===id); if(idx<0) return;
-  const c=clientes[idx], meta=parseInt(c.tipo||'10');
-  if(c.pontos<meta){alert('Ainda não atingiu a meta.');return;}
-  const upd={...c,pontos:0,resgates:(c.resgates||0)+1,
-    historico:[...(c.historico||[]),{data:new Date().toLocaleDateString('pt-BR'),tipo:'resgate'}]};
-  await setDoc(doc(db,'clientes',id),upd);
-  clientes[idx]=upd; // update local array
-  buscarClientePremio(); renderDashboard();
-  showMsg(document.getElementById('msg-premio'),`Prêmio resgatado para ${c.nome}!`,'success');
-  gerarWA(upd,'resgate');
-}
-
-async function removerCliente(id){
-  const idx=clientes.findIndex(x=>x.id===id); if(idx<0) return;
-  const nome=clientes[idx].nome;
-  if(!confirm(`Remover ${nome}?`)) return;
+async function novoCliente() {
+  const nome = document.getElementById('rn').value.trim();
+  const tel = document.getElementById('rt').value.trim();
+  const msg = document.getElementById('msg-cad');
+  if (!nome || !tel) { mostrarMsg(msg, 'Preencha nome e WhatsApp.', 'i'); return; }
+  const novo = {
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2, 5),
+    nome, tel,
+    contato: document.getElementById('rc').value,
+    racao: document.getElementById('rr').value.trim(),
+    tipo: document.getElementById('rtp').value,
+    pontos: 0, historico: [], resgates: 0,
+    cadastro: new Date().toLocaleDateString('pt-BR')
+  };
   try {
-    badge('⏳ Removendo...','syncing');
-    // 1. Deleta no Firebase PRIMEIRO e aguarda confirmação
-    await deleteDoc(doc(db,'clientes',id));
-    // 2. Só remove localmente após confirmação do Firebase
-    clientes.splice(idx,1);
-    renderClientes(); renderDashboard();
-    badge('🟢 Online','');
-  } catch(e){
-    badge('🟢 Online','');
-    alert('Erro ao remover: '+e.message);
+    await setDoc(doc(db, 'clientes', novo.id), novo);
+    C.push(novo);
+    mostrarMsg(msg, novo.nome + ' cadastrado!', 's');
+    document.getElementById('rn').value = '';
+    document.getElementById('rt').value = '';
+    document.getElementById('rr').value = '';
+    renderPainel();
+    abrirWA(novo, 'cadastro');
+  } catch(e) { mostrarMsg(msg, 'Erro: ' + e.message, 'i'); }
+}
+
+async function addCompra(id) {
+  const idx = getIdx(id); if (idx < 0) return;
+  const c = C[idx];
+  const meta = parseInt(c.tipo || '10');
+  const di = document.getElementById('cd').value;
+  const data = di ? di.split('-').reverse().join('/') : new Date().toLocaleDateString('pt-BR');
+  const qtd = Math.max(1, Math.min(20, parseInt(document.getElementById('cq').value) || 1));
+  const upd = { ...c, historico: [...(c.historico || [])] };
+  let n = 0;
+  for (let i = 0; i < qtd; i++) {
+    if (upd.pontos >= meta) { if (i === 0) { alert('Premio pendente! Resgate primeiro.'); return; } break; }
+    upd.pontos++;
+    upd.historico.push({ data, tipo: 'compra' });
+    n++;
+  }
+  try {
+    await setDoc(doc(db, 'clientes', id), upd);
+    C[idx] = upd;
+    buscaCompra();
+    renderPainel();
+    mostrarMsg(document.getElementById('msg-cmp'), '+' + n + ' para ' + c.nome + '. Saldo: ' + upd.pontos + '/' + meta, 's');
+    abrirWA(upd, 'compra');
+  } catch(e) { alert('Erro: ' + e.message); }
+}
+
+async function resgatar(id) {
+  const idx = getIdx(id); if (idx < 0) return;
+  const c = C[idx];
+  const meta = parseInt(c.tipo || '10');
+  if (c.pontos < meta) { alert('Ainda nao atingiu a meta.'); return; }
+  const upd = { ...c, pontos: 0, resgates: (c.resgates || 0) + 1,
+    historico: [...(c.historico || []), { data: new Date().toLocaleDateString('pt-BR'), tipo: 'resgate' }] };
+  try {
+    await setDoc(doc(db, 'clientes', id), upd);
+    C[idx] = upd;
+    buscaPremio();
+    renderPainel();
+    mostrarMsg(document.getElementById('msg-prm'), 'Premio resgatado para ' + c.nome + '!', 's');
+    abrirWA(upd, 'resgate');
+  } catch(e) { alert('Erro: ' + e.message); }
+}
+
+async function excluir(id) {
+  const idx = getIdx(id); if (idx < 0) return;
+  if (!confirm('Remover ' + C[idx].nome + '?')) return;
+  try {
+    bdg('Removendo...', 'wait');
+    await deleteDoc(doc(db, 'clientes', id));
+    C.splice(idx, 1);
+    bdg('Online', 'ok');
+    listarClientes();
+    renderPainel();
+  } catch(e) {
+    bdg('Online', 'ok');
+    alert('Erro ao remover: ' + e.message);
   }
 }
 
-async function editarRacao(id){
-  const idx=clientes.findIndex(x=>x.id===id); if(idx<0) return;
-  const nova=prompt(`Ração de ${clientes[idx].nome}:`,clientes[idx].racao||'');
-  if(nova===null) return;
-  clientes[idx]={...clientes[idx],racao:nova.trim()};
-  await setDoc(doc(db,'clientes',id),clientes[idx]);
-  renderClientes();
+async function editarRacao(id) {
+  const idx = getIdx(id); if (idx < 0) return;
+  const nova = prompt('Racao de ' + C[idx].nome + ':', C[idx].racao || '');
+  if (nova === null) return;
+  const upd = { ...C[idx], racao: nova.trim() };
+  try {
+    await setDoc(doc(db, 'clientes', id), upd);
+    C[idx] = upd;
+    listarClientes();
+  } catch(e) { alert('Erro: ' + e.message); }
 }
 
-function abrirWA(id){ const c=clientes.find(x=>x.id===id); if(c) gerarWA(c,'compra'); }
-
-function gerarWA(c,tipo){
-  const meta=parseInt(c.tipo||'10'), premio=meta===10?'50% de desconto no próximo pacote':'um pacote grátis', nome=c.nome.split(' ')[0];
-  let txt='';
-  if(tipo==='cadastro') txt=`Olá, ${nome}! 🐾
-
-Bem-vindo ao cartão fidelidade!
-
-A cada ${meta} pacotes, você ganha ${premio}.
-
-Saldo: 0/${meta} pacotes.
-
-Obrigado! 😊`;
-  else if(tipo==='compra'){
-    const f=meta-c.pontos;
-    txt=f<=0?`Olá, ${nome}! 🎉
-
-Cartão completo! Você ganhou ${premio}!
-
-Na próxima visita é só avisar. 🐾`
-           :`Olá, ${nome}! 🐾
-
-Compra registrada!
-
-Saldo: ${c.pontos}/${meta}. Faltam ${f} para ganhar ${premio}!
-
-Obrigado! 😊`;
-  } else txt=`Olá, ${nome}! 🎉
-
-Prêmio resgatado! Cartão zerado.
-
-A cada ${meta} pacotes você ganha ${premio}.
-
-Obrigado! 🐾`;
-  abrirModal('Copiar para WhatsApp',txt);
+function buscaCompra() {
+  const q = document.getElementById('cb').value.trim().toLowerCase();
+  const el = document.getElementById('ls-compra');
+  if (!q) { el.innerHTML = ''; return; }
+  const res = C.filter(c => c.nome.toLowerCase().includes(q) || c.tel.includes(q));
+  el.innerHTML = res.length ? res.slice(0, 5).map(c => card(c, 'compra')).join('') : '<p style="color:#aaa;font-size:13px;padding:6px 0">Nenhum encontrado.</p>';
 }
 
-function buscarClienteCompra(){
-  const q=document.getElementById('comp-busca').value.trim().toLowerCase(), el=document.getElementById('comp-resultados');
-  if(!q){el.innerHTML='';return;}
-  const res=clientes.filter(c=>c.nome.toLowerCase().includes(q)||c.tel.includes(q));
-  el.innerHTML=res.length?res.slice(0,5).map(c=>clienteCard(c,'compra')).join(''):`<p style="color:#aaa;font-size:13px;padding:8px 0">Nenhum encontrado.</p>`;
+function buscaPremio() {
+  const q = document.getElementById('pb2').value.trim().toLowerCase();
+  const el = document.getElementById('ls-premio');
+  if (!q) { el.innerHTML = ''; return; }
+  const res = C.filter(c => c.nome.toLowerCase().includes(q) || c.tel.includes(q));
+  el.innerHTML = res.length ? res.slice(0, 5).map(c => card(c, 'premio')).join('') : '<p style="color:#aaa;font-size:13px;padding:6px 0">Nenhum encontrado.</p>';
 }
 
-function buscarClientePremio(){
-  const q=document.getElementById('premio-busca').value.trim().toLowerCase(), el=document.getElementById('premio-resultados');
-  if(!q){el.innerHTML='';return;}
-  const res=clientes.filter(c=>c.nome.toLowerCase().includes(q)||c.tel.includes(q));
-  el.innerHTML=res.length?res.slice(0,5).map(c=>clienteCard(c,'premio')).join(''):`<p style="color:#aaa;font-size:13px;padding:8px 0">Nenhum encontrado.</p>`;
+function diasDesde(d) {
+  if (!d) return 9999;
+  const p = d.split('/'); if (p.length < 3) return 9999;
+  const r = Math.floor((Date.now() - new Date(+p[2], +p[1]-1, +p[0])) / 86400000);
+  return isNaN(r) ? 9999 : r;
+}
+function ultimaCompra(c) {
+  const h = (c.historico || []).filter(x => x.tipo === 'compra');
+  return h.length ? h[h.length-1].data : null;
+}
+function freqMedia(c) {
+  const h = (c.historico || []).filter(x => x.tipo === 'compra');
+  if (h.length < 2) return null;
+  const ds = h.map(x => { const p = x.data.split('/'); return new Date(+p[2], +p[1]-1, +p[0]).getTime(); }).sort((a,b) => a-b);
+  let t = 0; for (let i = 1; i < ds.length; i++) t += ds[i] - ds[i-1];
+  return Math.round(t / (ds.length-1) / 86400000);
+}
+function corCRM(dias, d1, d2, d3) {
+  if (dias === 9999) return 'perdido';
+  if (dias <= d1) return 'verde';
+  if (dias <= d2) return 'amarelo';
+  if (dias <= d3) return 'vermelho';
+  return 'perdido';
 }
 
-// ── CRM ─────────────────────────────────────────────────
-function diasDesde(d){ if(!d)return 9999; const p=d.split('/'); if(p.length<3)return 9999; const r=Math.floor((Date.now()-new Date(+p[2],+p[1]-1,+p[0]))/(86400000)); return isNaN(r)?9999:r; }
-function ultimaCompra(c){ const h=(c.historico||[]).filter(x=>x.tipo==='compra'); return h.length?h[h.length-1].data:null; }
-function freqMedia(c){ const h=(c.historico||[]).filter(x=>x.tipo==='compra'); if(h.length<2)return null; const ds=h.map(x=>{const p=x.data.split('/');return new Date(+p[2],+p[1]-1,+p[0]).getTime();}).sort((a,b)=>a-b); let t=0; for(let i=1;i<ds.length;i++)t+=ds[i]-ds[i-1]; return Math.round(t/(ds.length-1)/86400000); }
-function semCor(d,d1,d2,d3){ return d===9999?'perdido':d<=d1?'verde':d<=d2?'amarelo':d<=d3?'vermelho':'perdido'; }
-function semIcon(c){ return{verde:'🟢',amarelo:'🟡',vermelho:'🔴',perdido:'⚫'}[c]; }
-function msgCRM(c,cor){
-  const r=c.racao||'ração', n=c.nome.split(' ')[0];
-  return{
-    verde:`Olá, ${n}! 🐾
-
-Tudo bem com seu pet? A ${r} está disponível. Qualquer coisa é só chamar! 😊`,
-    amarelo:`Olá, ${n}! 🐾
-
-Já faz um tempinho! A ${r} pode estar acabando. Quer que a gente separe? 😊`,
-    vermelho:`Olá, ${n}! 🐾
-
-Sentimos sua falta! A ${r} está no estoque e seu cartão tem ${c.pontos} ponto${c.pontos!==1?'s':''}. 😊`,
-    perdido:`Olá, ${n}! 🐾
-
-Faz muito tempo! Você tem ${c.pontos} ponto${c.pontos!==1?'s':''} esperando. Que tal passar? 😊`
-  }[cor]||'';
-}
-
-function renderCRM(){
-  const d1=+document.getElementById('crm-d1').value||20, d2=+document.getElementById('crm-d2').value||35, d3=+document.getElementById('crm-d3').value||60;
-  const dados=clientes.map(c=>({...c,dias:diasDesde(ultimaCompra(c)),freq:freqMedia(c),totalCompras:(c.historico||[]).filter(h=>h.tipo==='compra').length})).filter(c=>c.totalCompras>0);
-  dados.forEach(c=>c.cor=semCor(c.dias,d1,d2,d3));
-  const cnt={verde:0,amarelo:0,vermelho:0,perdido:0}; dados.forEach(c=>cnt[c.cor]++);
-  document.getElementById('crm-metricas').innerHTML=`
-    <div class="metric"><div class="metric-label">🟢 Em dia</div><div class="metric-value">${cnt.verde}</div></div>
-    <div class="metric"><div class="metric-label">🟡 Atenção</div><div class="metric-value">${cnt.amarelo}</div></div>
-    <div class="metric"><div class="metric-label">🔴 Em risco</div><div class="metric-value">${cnt.vermelho}</div></div>
-    <div class="metric"><div class="metric-label">⚫ Perdido</div><div class="metric-value">${cnt.perdido}</div></div>`;
-  const fil=(crmFilter==='todos'?dados:dados.filter(c=>c.cor===crmFilter)).sort((a,b)=>b.dias-a.dias);
-  const bg={verde:'#e8f9f0',amarelo:'#fffbe6',vermelho:'#fff5f5',perdido:'#f0f0f0'};
-  const tx={verde:'#0F6E56',amarelo:'#7a5c00',vermelho:'#a32d2d',perdido:'#666'};
-  // Store CRM messages in cache to avoid inline escaping issues
-  window._crmMsgs = {};
-  fil.forEach(c => { window._crmMsgs[c.id] = {nome: c.nome, msg: msgCRM(c,c.cor)}; });
-
-  document.getElementById('crm-lista').innerHTML=fil.length?fil.map(c=>{
-    const dt=c.dias===9999?'Sem compras':c.dias===0?'Hoje':c.dias===1?'Ontem':`Há ${c.dias} dias`;
-    return `<div class="client-item">
-      <div class="client-header">
-        <div>
-          <div class="client-name">${semIcon(c.cor)} ${c.nome}</div>
-          <div class="client-phone">${c.tel}</div>
-          ${c.racao?`<span class="tag tag-racao">${c.racao}</span>`:''}
-          <span class="tag tag-contato">📱 ${c.contato||'Paiol'}</span>
-        </div>
-        <div style="text-align:right">
-          <span style="font-size:12px;padding:4px 10px;border-radius:20px;font-weight:600;background:${bg[c.cor]};color:${tx[c.cor]};display:block;margin-bottom:4px">${dt}</span>
-          <span style="font-size:11px;color:#888">${c.totalCompras} compra${c.totalCompras!==1?'s':''}</span>
-        </div>
+function renderCRM() {
+  const d1 = +document.getElementById('d1').value||20;
+  const d2 = +document.getElementById('d2').value||35;
+  const d3 = +document.getElementById('d3').value||60;
+  const bg = { verde:'#e8f9f0', amarelo:'#fffbe6', vermelho:'#fff5f5', perdido:'#f0f0f0' };
+  const tx = { verde:'#0F6E56', amarelo:'#7a5c00', vermelho:'#a32d2d', perdido:'#666' };
+  const ic = { verde:'Verde', amarelo:'Atencao', vermelho:'Risco', perdido:'Perdido' };
+  const dados = C.map(c => ({
+    ...c, dias: diasDesde(ultimaCompra(c)), freq: freqMedia(c),
+    total: (c.historico||[]).filter(h=>h.tipo==='compra').length
+  })).filter(c => c.total > 0);
+  dados.forEach(c => { c.cor = corCRM(c.dias, d1, d2, d3); });
+  const cnt = { verde:0, amarelo:0, vermelho:0, perdido:0 };
+  dados.forEach(c => cnt[c.cor]++);
+  document.getElementById('crm-kpis').innerHTML =
+    kpi('Verde', cnt.verde) + kpi('Atencao', cnt.amarelo) +
+    kpi('Risco', cnt.vermelho) + kpi('Perdido', cnt.perdido);
+  dados.forEach(c => { crmMsgs[c.id] = msgCRM(c, c.cor); });
+  const fil = (crmFiltroAtivo === 'todos' ? dados : dados.filter(c => c.cor === crmFiltroAtivo)).sort((a,b) => b.dias-a.dias);
+  if (!fil.length) { document.getElementById('ls-crm').innerHTML = '<div class="empty">Nenhum cliente.</div>'; return; }
+  document.getElementById('ls-crm').innerHTML = fil.map(c => {
+    const dt = c.dias===9999?'Sem compras':c.dias===0?'Hoje':c.dias===1?'Ontem':`Ha ${c.dias} dias`;
+    return `<div class="ci">
+      <div class="ch"><div>
+        <div class="cn">${ic[c.cor]} ${c.nome}</div>
+        <div class="cp">${c.tel}</div>
+        ${c.racao ? `<span class="tg rc">${c.racao}</span>` : ''}
+        <span class="tg ct">📱 ${c.contato||'Paiol'}</span>
       </div>
-      <div style="font-size:12px;color:#888;margin:4px 0 8px">${c.freq?`Recompra média: ${c.freq} dias`:'1ª compra'} · ${c.pontos}/${c.tipo||10} pts</div>
-      <button class="btn btn-success" onclick="abrirCrmMsg('${c.id}')">📱 Mensagem WA</button>
+      <div style="text-align:right">
+        <span style="font-size:11px;padding:3px 9px;border-radius:20px;font-weight:600;background:${bg[c.cor]};color:${tx[c.cor]};display:block;margin-bottom:3px">${dt}</span>
+        <span style="font-size:11px;color:#888">${c.total} compra${c.total!==1?'s':''}</span>
+      </div></div>
+      <div style="font-size:11px;color:#888;margin:3px 0 7px">${c.freq?`Media: ${c.freq} dias`:'1a compra'} - ${c.pontos}/${c.tipo||10} pts</div>
+      <button class="btn g" data-action="crmwa" data-id="${c.id}">Mensagem WA</button>
     </div>`;
-  }).join(''):`<div class="empty">Nenhum cliente nesta categoria.</div>`;
+  }).join('');
 }
 
-
-function abrirCrmMsg(id){
-  const data = window._crmMsgs && window._crmMsgs[id];
-  if(!data) return;
-  abrirModal('Mensagem para '+data.nome, data.msg);
+function msgCRM(c, cr) {
+  const r = c.racao || 'racao';
+  const n = c.nome.split(' ')[0];
+  const m = {
+    verde: `Ola, ${n}!\n\nTudo bem com seu pet?\nA ${r} esta disponivel aqui. Qualquer coisa e so chamar!`,
+    amarelo: `Ola, ${n}!\n\nJa faz um tempinho que nao te vemos!\nA ${r} pode estar acabando. Quer que separemos um pacote?`,
+    vermelho: `Ola, ${n}!\n\nEstamos com saudade! A ${r} esta no estoque e seu cartao tem ${c.pontos} ponto${c.pontos!==1?'s':''}. Nao perde!`,
+    perdido: `Ola, ${n}!\n\nFaz muito tempo que nao te vemos!\nVoce tem ${c.pontos} ponto${c.pontos!==1?'s':''} no cartao esperando. Que tal passar aqui?`
+  };
+  return m[cr] || m.perdido;
 }
 
-// ── MODAL ────────────────────────────────────────────────
-function abrirModal(t,b){ document.getElementById('modal-title').textContent=t; document.getElementById('modal-body').textContent=b; document.getElementById('modal-overlay').classList.add('open'); }
-function fecharModal(){ document.getElementById('modal-overlay').classList.remove('open'); }
-document.getElementById('modal-overlay').addEventListener('click',e=>{if(e.target===e.currentTarget)fecharModal();});
-function copiarMsg(){ navigator.clipboard.writeText(document.getElementById('modal-body').textContent).then(fecharModal).catch(()=>alert('Copie manualmente.')); }
+function abrirWA(c, tipo) {
+  const meta = parseInt(c.tipo||'10');
+  const premio = meta===10 ? '50% de desconto no proximo pacote' : 'um pacote gratis';
+  const n = c.nome.split(' ')[0];
+  let txt = '';
+  if (tipo === 'cadastro') {
+    txt = `Ola, ${n}!\n\nBem-vindo ao cartao fidelidade!\nA cada ${meta} pacotes voce ganha ${premio}.\nSaldo: 0/${meta} pacotes.\n\nObrigado!`;
+  } else if (tipo === 'compra') {
+    const f = meta - c.pontos;
+    txt = f <= 0
+      ? `Ola, ${n}!\n\nCartao completo! Voce ganhou ${premio}!\nNa proxima visita e so avisar.`
+      : `Ola, ${n}!\n\nCompra registrada!\nSaldo: ${c.pontos}/${meta}. Faltam ${f} para ganhar ${premio}!\n\nObrigado!`;
+  } else {
+    txt = `Ola, ${n}!\n\nPremio resgatado! Cartao zerado.\nA cada ${meta} pacotes voce ganha ${premio}.\n\nObrigado!`;
+  }
+  abrirModal('Copiar para WhatsApp', txt);
+}
 
-// ── EXPOR AO WINDOW ──────────────────────────────────────
-Object.assign(window,{showScreen,setFilter,setCrmFilter,renderClientes,renderCRM,renderDashboard,abrirCrmMsg,
-  cadastrarCliente,registrarCompra,resgatarPremio,removerCliente,editarRacao,
-  abrirWA,buscarClienteCompra,buscarClientePremio,abrirModal,fecharModal,copiarMsg,sincronizar});
+function waCliente(id) { const c = getC(id); if (c) abrirWA(c, 'compra'); }
+function abrirCRM(id) { const c = getC(id); if (!c) return; abrirModal('Mensagem para ' + c.nome, crmMsgs[id] || msgCRM(c, 'verde')); }
 
-document.getElementById('comp-data').value=new Date().toISOString().split('T')[0];
+function abrirModal(titulo, corpo) {
+  document.getElementById('mo-titulo').textContent = titulo;
+  document.getElementById('mo-corpo').textContent = corpo;
+  document.getElementById('modal').classList.add('open');
+}
+function fecharModal() { document.getElementById('modal').classList.remove('open'); }
+document.getElementById('modal').addEventListener('click', e => { if (e.target === e.currentTarget) fecharModal(); });
+function copiar() { navigator.clipboard.writeText(document.getElementById('mo-corpo').textContent).then(fecharModal).catch(() => alert('Copie manualmente.')); }
+
+function mostrarMsg(el, txt, tipo) { el.textContent = txt; el.className = 'msg show ' + tipo; setTimeout(() => el.classList.remove('show'), 4000); }
+
+Object.assign(window, { ir, filtrar, crmFiltrar, listarClientes, renderCRM, novoCliente, buscaCompra, buscaPremio, fecharModal, copiar, pgAtual: 1 });
+
+document.getElementById('cd').value = new Date().toISOString().split('T')[0];
 init();
+
 </script>
 </body>
 </html>
