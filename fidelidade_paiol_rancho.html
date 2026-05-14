@@ -188,6 +188,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getFirestore, collection, doc, setDoc, deleteDoc, getDocs, writeBatch } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getAuth, signInAnonymously } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
 const fb = initializeApp({
   apiKey:"AIzaSyDiE87XZkpIMUCC9dvgzgH6GuVjTs6Z2Ro",
@@ -224,6 +225,9 @@ async function carregarDoFirebase(){
 // ── INICIALIZAR ─────────────────────────────────────────
 async function init(){
   try {
+    badge('⏳ Conectando...','syncing');
+    const auth = getAuth(fb);
+    await signInAnonymously(auth);
     badge('⏳ Verificando...','syncing');
     await carregarDoFirebase();
     // Import missing
