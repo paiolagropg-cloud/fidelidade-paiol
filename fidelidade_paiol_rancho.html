@@ -633,18 +633,22 @@ function editarCliente(id) {
 
 async function excluirCliente(id) {
   const idx = C.findIndex(x => x.id === id);
-  if (idx < 0) return;
-  if (!confirm('Remover ' + C[idx].nome + '? Esta acao nao pode ser desfeita.')) return;
+  if (idx < 0) { alert('Cliente nao encontrado localmente.'); return; }
+  const nome = C[idx].nome;
+  if (!confirm('Remover ' + nome + '? Esta acao nao pode ser desfeita.')) return;
   try {
     bdg('⏳ Removendo...', 'wait');
-    await deleteDoc(doc(db, 'clientes', id));
+    const ref = doc(db, 'clientes', id);
+    await deleteDoc(ref);
+    alert('Cliente ' + nome + ' removido com sucesso!');
     C.splice(idx, 1);
     bdg('🟢 Online', 'ok');
     listarClientes();
     renderPainel();
   } catch(e) {
-    bdg('🟢 Online', 'ok');
-    alert('Erro ao remover: ' + e.message);
+    bdg('🔴 Erro', 'err');
+    alert('ERRO ao remover: ' + e.message + ' | ID: ' + id);
+    setTimeout(() => bdg('🟢 Online', 'ok'), 3000);
   }
 }
 
