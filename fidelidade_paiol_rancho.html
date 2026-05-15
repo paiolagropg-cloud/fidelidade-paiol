@@ -85,6 +85,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="grid" id="kpis"><div class="loading">Carregando...</div></div>
   <div class="card"><p class="stitle">🎁 Premios para resgatar</p><div id="ls-premios" class="clist"></div></div>
   <div class="card"><p class="stitle">🔥 Proximos do premio (faltam 1-2)</p><div id="ls-quase" class="clist"></div></div>
+<div class="card"><p class="stitle">📊 Distribuicao por pacotes</p><div id="ls-dist"></div></div>
 </div>
 
 <div id="pg-clientes" class="page">
@@ -187,7 +188,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, signInAnonymously } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { getFirestore, collection, doc, setDoc, getDocs, writeBatch } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getFirestore, collection, doc, setDoc, deleteDoc, getDocs, writeBatch } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const app = initializeApp({
   apiKey: "AIzaSyDiE87XZkpIMUCC9dvgzgH6GuVjTs6Z2Ro",
@@ -298,7 +299,8 @@ function card(c, modo) {
   } else {
     acoes = '<button class="btn g" data-action="compra" data-id="' + c.id + '">+1</button>'
       + ' <button class="btn" data-action="wa" data-id="' + c.id + '" style="font-size:12px;padding:5px 9px">📱 WA</button>'
-      + ' <button class="btn" data-action="racao" data-id="' + c.id + '" style="font-size:12px;padding:5px 9px">✏️ Racao</button>';
+      + ' <button class="btn" data-action="editar" data-id="' + c.id + '" style="font-size:12px;padding:5px 9px">✏️ Editar</button>'
+      + ' <button class="btn r" data-action="excluir" data-id="' + c.id + '" style="font-size:12px;padding:5px 9px">🗑</button>';
   }
   return '<div class="ci">'
     + '<div class="ch"><div>'
@@ -325,6 +327,8 @@ document.body.addEventListener('click', async function(e) {
   if (action === 'wa') waCliente(id);
   if (action === 'racao') await editarRacao(id);
   if (action === 'crmwa') abrirCRM(id);
+  if (action === 'editar') editarCliente(id);
+  if (action === 'excluir') await excluirCliente(id);
 });
 
 function renderPainel() {
@@ -342,6 +346,33 @@ function renderPainel() {
   document.getElementById('ls-quase').innerHTML = quase.length
     ? quase.map(c => card(c, 'lista')).join('')
     : '<div class="empty">Ninguem proximo do premio.</div>';
+
+  // Distribution by pacotes
+  const dist = {};
+  C.forEach(c => {
+    const p = c.pontos || 0;
+    if (!dist[p]) dist[p] = [];
+    dist[p].push(c.nome);
+  });
+  const maxPac = Math.max(...Object.keys(dist).map(Number), 0);
+  let distHtml = '';
+  for (let i = 0; i <= maxPac; i++) {
+    const lista = dist[i] || [];
+    if (lista.length === 0) continue;
+    const pct = Math.round(lista.length / C.length * 100);
+    const showNomes = i >= 6;
+    distHtml += '<div style="margin-bottom:10px">'
+      + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px">'
+      + '<span style="font-size:13px;font-weight:600">' + i + ' pacote' + (i !== 1 ? 's' : '') + '</span>'
+      + '<span style="font-size:12px;color:#888">' + lista.length + ' cliente' + (lista.length !== 1 ? 's' : '') + ' (' + pct + '%)</span>'
+      + '</div>'
+      + '<div style="background:#f0f0e8;border-radius:99px;height:8px;overflow:hidden;margin-bottom:4px">'
+      + '<div style="height:8px;border-radius:99px;background:#1a1a1a;width:' + pct + '%"></div>'
+      + '</div>'
+      + (showNomes ? '<div style="font-size:11px;color:#666">' + lista.join(', ') + '</div>' : '')
+      + '</div>';
+  }
+  document.getElementById('ls-dist').innerHTML = distHtml || '<div class="empty">Sem dados.</div>';
 }
 
 function listarClientes() {
@@ -579,6 +610,42 @@ function abrirWA(c, tipo) {
     txt = 'Ola, ' + n + '!' + nl + nl + 'Premio resgatado! Cartao zerado.' + nl + 'A cada ' + meta + ' pacotes voce ganha ' + premio + '.' + nl + nl + 'Obrigado!';
   }
   abrirModal('Copiar para WhatsApp', txt);
+}
+
+
+function editarCliente(id) {
+  const idx = C.findIndex(x => x.id === id);
+  if (idx < 0) return;
+  const c = C[idx];
+  const nome = prompt('Nome:', c.nome);
+  if (nome === null) return;
+  const tel = prompt('WhatsApp:', c.tel);
+  if (tel === null) return;
+  const racao = prompt('Racao:', c.racao || '');
+  if (racao === null) return;
+  const upd = { ...c, nome: nome.trim(), tel: tel.trim(), racao: racao.trim() };
+  setDoc(doc(db, 'clientes', id), upd).then(() => {
+    C[idx] = upd;
+    listarClientes();
+    renderPainel();
+  }).catch(e => alert('Erro: ' + e.message));
+}
+
+async function excluirCliente(id) {
+  const idx = C.findIndex(x => x.id === id);
+  if (idx < 0) return;
+  if (!confirm('Remover ' + C[idx].nome + '? Esta acao nao pode ser desfeita.')) return;
+  try {
+    bdg('⏳ Removendo...', 'wait');
+    await deleteDoc(doc(db, 'clientes', id));
+    C.splice(idx, 1);
+    bdg('🟢 Online', 'ok');
+    listarClientes();
+    renderPainel();
+  } catch(e) {
+    bdg('🟢 Online', 'ok');
+    alert('Erro ao remover: ' + e.message);
+  }
 }
 
 function waCliente(id) { const c = C.find(x => x.id === id); if (c) abrirWA(c, 'compra'); }
