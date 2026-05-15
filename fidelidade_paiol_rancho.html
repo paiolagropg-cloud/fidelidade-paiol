@@ -230,19 +230,6 @@ async function init() {
     bdg('⏳ Carregando...', 'wait');
     const snap = await getDocs(col);
     C = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    const ids = new Set(C.map(c => c.id));
-    const faltam = DADOS.filter(c => !ids.has(c.id));
-    if (faltam.length > 0) {
-      bdg('⏳ Importando ' + faltam.length + '...', 'wait');
-      const LOTE = 400;
-      for (let i = 0; i < faltam.length; i += LOTE) {
-        const bat = writeBatch(db);
-        faltam.slice(i, i + LOTE).forEach(c => bat.set(doc(db, 'clientes', c.id), c));
-        await bat.commit();
-      }
-      const snap2 = await getDocs(col);
-      C = snap2.docs.map(d => ({ id: d.id, ...d.data() }));
-    }
     bdg('🟢 Online', 'ok');
     renderPainel();
     listarClientes();
